@@ -80,7 +80,6 @@ class Vehicle(BaseModel):
     taxi: Optional[bool] = Field(None, alias="taxi_indicator")
     vehicle_type: Optional[VehicleType] = Field(None, alias="voertuigsoort")
 
-    @staticmethod  # type: ignore
     @validator(
         "apk_expiration",
         "first_admission_netherlands",
@@ -88,7 +87,8 @@ class Vehicle(BaseModel):
         "name_registration_date",
         pre=True,
     )
-    def parse_date(value: str) -> date:
+    @classmethod
+    def parse_date(cls, value: str) -> date:  # noqa: F841
         """Parse date from string.
 
         Args:
@@ -99,7 +99,6 @@ class Vehicle(BaseModel):
         """
         return datetime.strptime(value, "%Y%m%d").date()
 
-    @staticmethod  # type: ignore
     @validator(
         "exported",
         "liability_insured",
@@ -108,7 +107,8 @@ class Vehicle(BaseModel):
         "taxi",
         pre=True,
     )
-    def parse_bool(value: str) -> Optional[bool]:
+    @classmethod
+    def parse_bool(cls, value: str) -> Optional[bool]:  # noqa: F841
         """Parse boolean from string.
 
         Args:
@@ -119,9 +119,9 @@ class Vehicle(BaseModel):
         """
         return value == "Ja"
 
-    @staticmethod  # type: ignore
     @validator("brand", "model")
-    def make_pretty(value: str) -> str:
+    @classmethod
+    def make_pretty(cls, value: str) -> str:  # noqa: F841
         """Parse date from string.
 
         Args:
@@ -132,14 +132,14 @@ class Vehicle(BaseModel):
         """
         return value.strip().title()
 
-    @staticmethod  # type: ignore
     @validator(
         "interior",
         "odometer_judgement",
         "vehicle_type",
         pre=True,
     )
-    def filter_empty(value: str) -> Optional[str]:
+    @classmethod
+    def filter_empty(cls, value: str) -> Optional[str]:  # noqa: F841
         """Filter out empty values.
 
         Args:
