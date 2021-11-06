@@ -80,6 +80,7 @@ class Vehicle(BaseModel):
     taxi: Optional[bool] = Field(None, alias="taxi_indicator")
     vehicle_type: Optional[VehicleType] = Field(None, alias="voertuigsoort")
 
+    @staticmethod  # type: ignore
     @validator(
         "apk_expiration",
         "first_admission_netherlands",
@@ -87,7 +88,6 @@ class Vehicle(BaseModel):
         "name_registration_date",
         pre=True,
     )
-    @staticmethod
     def parse_date(value: str) -> date:
         """Parse date from string.
 
@@ -99,6 +99,7 @@ class Vehicle(BaseModel):
         """
         return datetime.strptime(value, "%Y%m%d").date()
 
+    @staticmethod  # type: ignore
     @validator(
         "exported",
         "liability_insured",
@@ -107,7 +108,6 @@ class Vehicle(BaseModel):
         "taxi",
         pre=True,
     )
-    @staticmethod
     def parse_bool(value: str) -> Optional[bool]:
         """Parse boolean from string.
 
@@ -119,8 +119,8 @@ class Vehicle(BaseModel):
         """
         return value == "Ja"
 
+    @staticmethod  # type: ignore
     @validator("brand", "model")
-    @staticmethod
     def make_pretty(value: str) -> str:
         """Parse date from string.
 
@@ -132,13 +132,13 @@ class Vehicle(BaseModel):
         """
         return value.strip().title()
 
+    @staticmethod  # type: ignore
     @validator(
         "interior",
         "odometer_judgement",
         "vehicle_type",
         pre=True,
     )
-    @staticmethod
     def filter_empty(value: str) -> Optional[str]:
         """Filter out empty values.
 
