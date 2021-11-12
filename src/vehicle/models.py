@@ -42,6 +42,8 @@ class Vehicle(BaseModel):
     """
 
     apk_expiration: date = Field(..., alias="vervaldatum_apk")
+    ascription_date: date = Field(..., alias="datum_tenaamstelling")
+    ascription_possible: Optional[bool] = Field(None, alias="tenaamstellen_mogelijk")
     brand: str = Field(..., alias="merk")
     energy_label: Optional[str] = Field(None, alias="zuinigheidslabel")
     engine_capacity: Optional[int] = Field(None, alias="cilinderinhoud")
@@ -60,8 +62,6 @@ class Vehicle(BaseModel):
     mass_empty: Optional[int] = Field(None, alias="massa_ledig_voertuig")
     mass_driveable: Optional[int] = Field(None, alias="massa_rijklaar")
     model: str = Field(..., alias="handelsbenaming")
-    ascription_date: date = Field(..., alias="datum_tenaamstelling")
-    ascription_possible: Optional[bool] = Field(None, alias="tenaamstellen_mogelijk")
     number_of_cylinders: Optional[int] = Field(None, alias="aantal_cilinders")
     number_of_doors: Optional[int] = Field(None, alias="aantal_deuren")
     number_of_seats: Optional[int] = Field(None, alias="aantal_zitplaatsen")
@@ -80,9 +80,9 @@ class Vehicle(BaseModel):
 
     @validator(
         "apk_expiration",
+        "ascription_date",
         "first_admission_netherlands",
         "first_admission",
-        "name_registration_date",
         pre=True,
     )
     @classmethod
@@ -98,9 +98,9 @@ class Vehicle(BaseModel):
         return datetime.strptime(value, "%Y%m%d").date()
 
     @validator(
+        "ascription_possible",
         "exported",
         "liability_insured",
-        "name_registration_possible",
         "pending_recall",
         "taxi",
         pre=True,

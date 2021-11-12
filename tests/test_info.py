@@ -36,6 +36,8 @@ async def test_vehicle_data(aresponses):  # pylint: disable=too-many-statements
         vehicle: Vehicle = await rdw.vehicle("11-ZKZ-3")
         assert vehicle
         assert vehicle.apk_expiration == date(2022, 1, 4)
+        assert vehicle.ascription_date == date(2021, 11, 4)
+        assert vehicle.ascription_possible is True
         assert vehicle.brand == "Skoda"
         assert vehicle.energy_label == "A"
         assert vehicle.engine_capacity == 999
@@ -50,8 +52,6 @@ async def test_vehicle_data(aresponses):  # pylint: disable=too-many-statements
         assert vehicle.mass_driveable == 940
         assert vehicle.mass_empty == 840
         assert vehicle.model == "Citigo"
-        assert vehicle.name_registration_date == date(2021, 11, 4)
-        assert vehicle.name_registration_possible is True
         assert vehicle.number_of_cylinders == 3
         assert vehicle.number_of_doors == 0
         assert vehicle.number_of_seats == 4
