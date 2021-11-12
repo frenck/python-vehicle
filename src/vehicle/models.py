@@ -60,10 +60,8 @@ class Vehicle(BaseModel):
     mass_empty: Optional[int] = Field(None, alias="massa_ledig_voertuig")
     mass_driveable: Optional[int] = Field(None, alias="massa_rijklaar")
     model: str = Field(..., alias="handelsbenaming")
-    name_registration_date: date = Field(..., alias="datum_tenaamstelling")
-    name_registration_possible: Optional[bool] = Field(
-        None, alias="tenaamstellen_mogelijk"
-    )
+    ascription_date: date = Field(..., alias="datum_tenaamstelling")
+    ascription_possible: Optional[bool] = Field(None, alias="tenaamstellen_mogelijk")
     number_of_cylinders: Optional[int] = Field(None, alias="aantal_cilinders")
     number_of_doors: Optional[int] = Field(None, alias="aantal_deuren")
     number_of_seats: Optional[int] = Field(None, alias="aantal_zitplaatsen")
