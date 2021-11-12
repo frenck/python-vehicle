@@ -93,8 +93,6 @@ async def test_vehicle_data(aresponses):  # pylint: disable=too-many-statements
         assert vehicle.mass_driveable == 950
         assert vehicle.mass_empty == 850
         assert vehicle.model == "Escort Mexico"
-        assert vehicle.name_registration_date == date(2013, 7, 25)
-        assert vehicle.name_registration_possible is True
         assert vehicle.number_of_cylinders == 4
         assert vehicle.number_of_doors == 2
         assert vehicle.number_of_seats is None
