@@ -77,6 +77,8 @@ async def test_vehicle_data(aresponses):  # pylint: disable=too-many-statements
         vehicle: Vehicle = await rdw.vehicle("00-01-TJ")
         assert vehicle
         assert vehicle.apk_expiration == date(2023, 7, 26)
+        assert vehicle.ascription_date == date(2013, 7, 25)
+        assert vehicle.ascription_possible is True
         assert vehicle.brand == "Ford"
         assert vehicle.energy_label is None
         assert vehicle.engine_capacity is None
