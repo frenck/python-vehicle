@@ -41,6 +41,7 @@ class VehicleInterior(str, Enum):
     SEDAN = "sedan"
     STATION_WAGON = "stationwagen"
     PICK_UP_TRUCK = "pick-up truck"
+    NOT_AVAILABLE = "N.v.t."
 
 
 class VehicleOdometerJudgement(str, Enum):
