@@ -41,7 +41,7 @@ class Vehicle(BaseModel):
         vehicle_type: Type of the vehicle.
     """
 
-    apk_expiration: date = Field(..., alias="vervaldatum_apk")
+    apk_expiration: Optional[date] = Field(None, alias="vervaldatum_apk")
     ascription_date: date = Field(..., alias="datum_tenaamstelling")
     ascription_possible: Optional[bool] = Field(None, alias="tenaamstellen_mogelijk")
     brand: str = Field(..., alias="merk")
