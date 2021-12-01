@@ -39,7 +39,7 @@ class VehicleInterior(str, Enum):
     OPEN_LOADING_FLOOR = "open laadvloer"
     OPEN_VEHICLE = "open wagen"
     SEDAN = "sedan"
-    STATION_WAGON = "station_wagon"
+    STATION_WAGON = "stationwagen"
 
 
 class VehicleOdometerJudgement(str, Enum):
