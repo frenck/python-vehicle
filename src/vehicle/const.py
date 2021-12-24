@@ -29,7 +29,7 @@ class VehicleInterior(str, Enum):
 
     CAMPER = "kampeerwagen"
     CARAVAN = "caravan"
-    CLOSED_INTERIOR = "closed_interior"
+    CLOSED_INTERIOR = "gesloten opbouw"
     CONVERTIBLE = "cabriolet"
     COUPE = "coupe"
     FIRETRUCK = "brandweerwagen"
