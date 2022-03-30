@@ -43,7 +43,6 @@ async def test_vehicle_data(aresponses):  # pylint: disable=too-many-statements
         assert vehicle.engine_capacity == 999
         assert vehicle.exported is False
         assert vehicle.first_admission == date(2013, 1, 4)
-        assert vehicle.first_admission_netherlands == date(2013, 1, 4)
         assert vehicle.interior == VehicleInterior.HATCHBACK
         assert vehicle.last_odometer_registration_year == 2021
         assert vehicle.liability_insured is False
@@ -84,7 +83,6 @@ async def test_vehicle_data(aresponses):  # pylint: disable=too-many-statements
         assert vehicle.engine_capacity is None
         assert vehicle.exported is False
         assert vehicle.first_admission == date(1972, 1, 13)
-        assert vehicle.first_admission_netherlands == date(1972, 1, 13)
         assert vehicle.interior is None
         assert vehicle.last_odometer_registration_year == 2021
         assert vehicle.liability_insured is True

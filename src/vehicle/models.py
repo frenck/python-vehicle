@@ -18,7 +18,6 @@ class Vehicle(BaseModel):
         energy_label: Energy label of the vehicle.
         engine_capacity: Engine capacity of the vehicle in CC
         exported: Whether the vehicle is exported or not.
-        first_admission_netherlands: First date of registration in the Netherlands.
         first_admission: First date of registration.
         interior: Interior of the vehicle.
         last_odometer_registration_year: Last year odometer was registered.
@@ -56,9 +55,6 @@ class Vehicle(BaseModel):
     license_plate: str = Field(..., alias="kenteken")
     list_price: Optional[int] = Field(None, alias="catalogusprijs")
     first_admission: date = Field(..., alias="datum_eerste_toelating")
-    first_admission_netherlands: date = Field(
-        ..., alias="datum_eerste_afgifte_nederland"
-    )
     mass_empty: Optional[int] = Field(None, alias="massa_ledig_voertuig")
     mass_driveable: Optional[int] = Field(None, alias="massa_rijklaar")
     model: str = Field(..., alias="handelsbenaming")
@@ -81,7 +77,6 @@ class Vehicle(BaseModel):
     @validator(
         "apk_expiration",
         "ascription_date",
-        "first_admission_netherlands",
         "first_admission",
         pre=True,
     )
