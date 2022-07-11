@@ -603,7 +603,7 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "pre-commit"
-version = "2.19.0"
+version = "2.20.0"
 description = "A framework for managing and maintaining multi-language pre-commit hooks."
 category = "dev"
 optional = false
@@ -991,7 +991,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "c98a62a2292bedb8228ae2cc812d9b7457858aeb21fbf815225341253d420d6a"
+content-hash = "5dc92c5c2d86bfd3a4c74c18b08437fd54ad6cdec65eec35cfa6293835d8a6f3"
 
 [metadata.files]
 aiohttp = []
