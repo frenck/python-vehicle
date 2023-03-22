@@ -4,14 +4,13 @@ import asyncio
 
 import aiohttp
 import pytest
-
+from aresponses import Response, ResponsesMockServer
 from vehicle import RDW
 from vehicle.const import Dataset
 from vehicle.exceptions import RDWConnectionError, RDWError
 
 
-@pytest.mark.asyncio
-async def test_json_request(aresponses):
+async def test_json_request(aresponses: ResponsesMockServer) -> None:
     """Test JSON response is handled correctly."""
     aresponses.add(
         "opendata.rdw.nl",
@@ -30,8 +29,7 @@ async def test_json_request(aresponses):
         await rdw.close()
 
 
-@pytest.mark.asyncio
-async def test_internal_session(aresponses):
+async def test_internal_session(aresponses: ResponsesMockServer) -> None:
     """Test JSON response is handled correctly."""
     aresponses.add(
         "opendata.rdw.nl",
@@ -48,11 +46,11 @@ async def test_internal_session(aresponses):
         assert response["status"] == "ok"
 
 
-@pytest.mark.asyncio
-async def test_timeout(aresponses):
+async def test_timeout(aresponses: ResponsesMockServer) -> None:
     """Test request timeout."""
+
     # Faking a timeout by sleeping
-    async def response_handler(_):
+    async def response_handler(_: aiohttp.ClientResponse) -> Response:
         """Response handler for this test."""
         await asyncio.sleep(2)
         return aresponses.Response(body="Goodmorning!")
@@ -70,8 +68,7 @@ async def test_timeout(aresponses):
             assert await rdw._request(Dataset.PLATED_VEHICLES)
 
 
-@pytest.mark.asyncio
-async def test_http_error400(aresponses):
+async def test_http_error400(aresponses: ResponsesMockServer) -> None:
     """Test HTTP 404 response handling."""
     aresponses.add(
         "opendata.rdw.nl",
@@ -86,8 +83,7 @@ async def test_http_error400(aresponses):
             assert await rdw._request(Dataset.PLATED_VEHICLES)
 
 
-@pytest.mark.asyncio
-async def test_unexpected_response(aresponses):
+async def test_unexpected_response(aresponses: ResponsesMockServer) -> None:
     """Test unexpected response handling."""
     aresponses.add(
         "opendata.rdw.nl",
@@ -102,8 +98,7 @@ async def test_unexpected_response(aresponses):
             assert await rdw._request(Dataset.PLATED_VEHICLES)
 
 
-@pytest.mark.asyncio
-async def test_license_plate_normalization():
+async def test_license_plate_normalization() -> None:
     """Test normalization of license plates."""
     assert RDW.normalize_license_plate("AB-12-34") == "AB1234"
     assert RDW.normalize_license_plate("AB1234") == "AB1234"
