@@ -3,7 +3,7 @@ from datetime import date
 
 import aiohttp
 import pytest
-
+from aresponses import ResponsesMockServer
 from vehicle import (
     RDW,
     RDWError,
@@ -18,8 +18,9 @@ from vehicle.const import Dataset
 from . import load_fixture
 
 
-@pytest.mark.asyncio
-async def test_vehicle_data(aresponses):  # pylint: disable=too-many-statements
+async def test_vehicle_data(  # pylint: disable=too-many-statements
+    aresponses: ResponsesMockServer,
+) -> None:
     """Test getting Vehicle information."""
     aresponses.add(
         "opendata.rdw.nl",
@@ -73,7 +74,7 @@ async def test_vehicle_data(aresponses):  # pylint: disable=too-many-statements
     )
     async with aiohttp.ClientSession() as session:
         rdw = RDW(session=session)
-        vehicle: Vehicle = await rdw.vehicle("00-01-TJ")
+        vehicle = await rdw.vehicle("00-01-TJ")
         assert vehicle
         assert vehicle.apk_expiration == date(2023, 7, 26)
         assert vehicle.ascription_date == date(2013, 7, 25)
@@ -102,8 +103,7 @@ async def test_vehicle_data(aresponses):  # pylint: disable=too-many-statements
         assert vehicle.vehicle_type == VehicleType.PASSENGER_CAR
 
 
-@pytest.mark.asyncio
-async def test_no_vehicle(aresponses):
+async def test_no_vehicle(aresponses: ResponsesMockServer) -> None:
     """Test getting non-existing Vehicle."""
     aresponses.add(
         "opendata.rdw.nl",
@@ -121,8 +121,7 @@ async def test_no_vehicle(aresponses):
             await rdw.vehicle("00-00-00")
 
 
-@pytest.mark.asyncio
-async def test_no_license_plate_provided():
+async def test_no_license_plate_provided() -> None:
     """Test getting Vehicle without license plate."""
     rdw = RDW()
     with pytest.raises(RDWError):

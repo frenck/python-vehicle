@@ -5,7 +5,7 @@ import asyncio
 import socket
 from dataclasses import dataclass
 from importlib import metadata
-from typing import Any
+from typing import Any, cast
 
 import async_timeout
 from aiohttp.client import ClientError, ClientResponseError, ClientSession
@@ -31,9 +31,11 @@ class RDW:
         """Normalize license plate.
 
         Args:
+        ----
             license_plate: License plate.
 
         Returns:
+        -------
             Normalized license plate.
         """
         return license_plate.upper().replace("-", "").replace(" ", "").strip()
@@ -42,7 +44,7 @@ class RDW:
         self,
         dataset: str,
         *,
-        data: dict | None = None,
+        data: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Handle a request to a RDW open data (Socrata).
 
@@ -50,14 +52,17 @@ class RDW:
         the public RDW data.
 
         Args:
+        ----
             dataset: Identifier for the Socrata dataset to query.
             data: Dictionary of data to send to the Socrata API.
 
         Returns:
+        -------
             A Python dictionary (JSON decoded) with the response from
             the API.
 
         Raises:
+        ------
             RDWConnectionError: An error occurred while communicating with
                 the Socrata API.
             RDWError: Received an unexpected response from the Socrata API.
@@ -83,56 +88,58 @@ class RDW:
                 )
                 response.raise_for_status()
         except asyncio.TimeoutError as exception:
-            raise RDWConnectionError(
-                "Timeout occurred while connecting to the Socrata API"
-            ) from exception
+            msg = "Timeout occurred while connecting to the Socrata API"
+            raise RDWConnectionError(msg) from exception
         except (
             ClientError,
             ClientResponseError,
             socket.gaierror,
         ) as exception:
-            raise RDWConnectionError(
-                "Error occurred while communicating with Socrata API"
-            ) from exception
+            msg = "Error occurred while communicating with Socrata API"
+            raise RDWConnectionError(msg) from exception
 
         content_type = response.headers.get("Content-Type", "")
         if "application/json" not in content_type:
             text = await response.text()
+            msg = "Unexpected response from the Socrata API"
             raise RDWError(
-                "Unexpected response from the Socrata API",
+                msg,
                 {"Content-Type": content_type, "response": text},
             )
 
-        return await response.json()
+        return cast(dict[str, Any], await response.json())
 
     async def vehicle(self, license_plate: str | None = None) -> Vehicle:
         """Get devices information about a Vehicle.
 
         Args:
+        ----
             license_plate: License plate of the vehicle, if not provided
                 the license plate of the object will be used.
 
         Returns:
+        -------
             A Vehicle object, with information about the vehicle.
 
         Raises:
+        ------
             RDWError: No license plate provided.
             RDWUnknownLicensePlateError: License plate not found in RDW Socrata DB.
         """
         license_plate = license_plate or self.license_plate
         if license_plate is None:
-            raise RDWError("No license plate provided")
+            msg = "No license plate provided"
+            raise RDWError(msg)
 
         data = await self._request(
             Dataset.PLATED_VEHICLES,
             data={"kenteken": self.normalize_license_plate(license_plate)},
         )
         if not data:
-            raise RDWUnknownLicensePlateError(
-                f"License plate {license_plate} not found in RDW Socrata database"
-            )
+            msg = f"License plate {license_plate} not found in RDW Socrata database"
+            raise RDWUnknownLicensePlateError(msg)
 
-        return Vehicle.parse_obj(data[0])  # type: ignore
+        return Vehicle.parse_obj(data[0])  # type: ignore[index]
 
     async def close(self) -> None:
         """Close open client session."""
@@ -142,15 +149,17 @@ class RDW:
     async def __aenter__(self) -> RDW:
         """Async enter.
 
-        Returns:
+        Returns
+        -------
             The RDW object.
         """
         return self
 
-    async def __aexit__(self, *_exc_info) -> None:
+    async def __aexit__(self, *_exc_info: Any) -> None:
         """Async exit.
 
         Args:
+        ----
             _exc_info: Exec type.
         """
         await self.close()
