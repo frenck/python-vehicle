@@ -17,8 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Check out code from GitHub
-        uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f # v3
+        uses: actions/checkout@v3.4.0
       - name: 🏗 Initialize CodeQL
-        uses: github/codeql-action/init@67a35a08586135a9573f4327e904ecbf517a882d # v2
+        uses: github/codeql-action/init@v2.2.8
       - name: 🚀 Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@67a35a08586135a9573f4327e904ecbf517a882d # v2
+        uses: github/codeql-action/analyze@v2.2.8
