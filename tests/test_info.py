@@ -4,6 +4,7 @@ from datetime import date
 import aiohttp
 import pytest
 from aresponses import ResponsesMockServer
+
 from vehicle import (
     RDW,
     RDWError,
