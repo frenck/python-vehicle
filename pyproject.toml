@@ -1,15 +1,5 @@
 [tool.poetry]
-name = "vehicle"
-version = "0.0.0"
-description = "Asynchronous Python client providing RDW vehicle information."
 authors = ["Franck Nijhof <opensource@frenck.dev>"]
-maintainers = ["Franck Nijhof <opensource@frenck.dev>"]
-license = "MIT"
-readme = "README.md"
-homepage = "https://github.com/frenck/python-vehicle"
-repository = "https://github.com/frenck/python-vehicle"
-documentation = "https://github.com/frenck/python-vehicle"
-keywords = ["rdw", "vehicle", "apk", "api", "async", "client"]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Framework :: AsyncIO",
@@ -20,15 +10,25 @@ classifiers = [
   "Programming Language :: Python :: 3",
   "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+description = "Asynchronous Python client providing RDW vehicle information."
+documentation = "https://github.com/frenck/python-vehicle"
+homepage = "https://github.com/frenck/python-vehicle"
+keywords = ["rdw", "vehicle", "apk", "api", "async", "client"]
+license = "MIT"
+maintainers = ["Franck Nijhof <opensource@frenck.dev>"]
+name = "vehicle"
 packages = [
-    { include = "vehicle", from = "src" },
+  {include = "vehicle", from = "src"},
 ]
+readme = "README.md"
+repository = "https://github.com/frenck/python-vehicle"
+version = "0.0.0"
 
 [tool.poetry.dependencies]
-python = "^3.10"
 aiohttp = ">=3.0.0"
-yarl = ">=1.6.0"
 pydantic = "^1.8.0"
+python = "^3.10"
+yarl = ">=1.6.0"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/frenck/python-vehicle/issues"
@@ -78,8 +78,8 @@ disallow_any_generics = true
 disallow_incomplete_defs = true
 disallow_subclassing_any = true
 disallow_untyped_calls = true
-disallow_untyped_defs = true
 disallow_untyped_decorators = true
+disallow_untyped_defs = true
 no_implicit_optional = true
 no_implicit_reexport = true
 strict_optional = true
@@ -92,47 +92,47 @@ warn_unused_ignores = true
 
 [tool.pylint.MASTER]
 extension-pkg-whitelist = [
-  "pydantic"
+  "pydantic",
 ]
 ignore = [
-  "tests"
+  "tests",
 ]
 
 [tool.pylint.BASIC]
 good-names = [
-    "_",
-    "ex",
-    "fp",
-    "i",
-    "id",
-    "j",
-    "k",
-    "on",
-    "Run",
-    "T",
+  "_",
+  "ex",
+  "fp",
+  "i",
+  "id",
+  "j",
+  "k",
+  "on",
+  "Run",
+  "T",
 ]
 
 [tool.pylint.DESIGN]
 max-attributes = 8
 
 [tool.pylint."MESSAGES CONTROL"]
-disable= [
-    "format",
-    "unsubscriptable-object",
+disable = [
+  "duplicate-code",
+  "format",
+  "unsubscriptable-object",
 ]
 
 [tool.pylint.SIMILARITIES]
 ignore-imports = true
 
 [tool.pylint.FORMAT]
-max-line-length=88
+max-line-length = 88
 
 [tool.pytest.ini_options]
 addopts = "--cov"
 asyncio_mode = "auto"
 
 [tool.ruff]
-select = ["ALL"]
 ignore = [
   "ANN101", # Self... explanatory
   "ANN102", # cls... just as useless
@@ -142,17 +142,18 @@ ignore = [
   "D417", # False positives in some occasions
   "PLR2004", # Just annoying, not really useful
 ]
+select = ["ALL"]
 
 [tool.ruff.flake8-pytest-style]
-mark-parentheses = false
 fixture-parentheses = false
+mark-parentheses = false
 
 [tool.ruff.isort]
-known-first-party = ["elgato"]
+known-first-party = ["vehicle"]
 
 [tool.ruff.mccabe]
 max-complexity = 25
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]

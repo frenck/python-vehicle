@@ -5,6 +5,7 @@ import asyncio
 import aiohttp
 import pytest
 from aresponses import Response, ResponsesMockServer
+
 from vehicle import RDW
 from vehicle.const import Dataset
 from vehicle.exceptions import RDWConnectionError, RDWError

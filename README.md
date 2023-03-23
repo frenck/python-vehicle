@@ -9,6 +9,7 @@
 [![Build Status][build-shield]][build]
 [![Code Coverage][codecov-shield]][codecov]
 [![Quality Gate Status][sonarcloud-shield]][sonarcloud]
+[![Open in Dev Containers][devcontainer-shield]][devcontainer]
 
 [![Sponsor Frenck via GitHub Sponsors][github-sponsors-shield]][github-sponsors]
 
@@ -72,6 +73,11 @@ We've set up a separate document for our
 Thank you for being involved! :heart_eyes:
 
 ## Setting up a development environment
+
+The easiest way to start, is by opening a CodeSpace here on GitHub, or by using
+the [Dev Container][devcontainer] feature of Visual Studio Code.
+
+[![Open in Dev Containers][devcontainer-shield]][devcontainer]
 
 This Python project is fully managed using the [Poetry][poetry] dependency manager. But also relies on the use of NodeJS for certain checks during development.
 
@@ -138,6 +144,8 @@ SOFTWARE.
 [codecov-shield]: https://codecov.io/gh/frenck/python-vehicle/branch/main/graph/badge.svg
 [codecov]: https://codecov.io/gh/frenck/python-vehicle
 [contributors]: https://github.com/frenck/python-vehicle/graphs/contributors
+[devcontainer-shield]: https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode
+[devcontainer]: https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/frenck/python-vehicle
 [frenck]: https://github.com/frenck
 [github-sponsors-shield]: https://frenck.dev/wp-content/uploads/2019/12/github_sponsor.png
 [github-sponsors]: https://github.com/sponsors/frenck
