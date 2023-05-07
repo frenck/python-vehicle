@@ -28,7 +28,7 @@ class Vehicle(BaseModel):
         liability_insured: Whether the vehicle is insured or not.
         license_plate: Normalized license plate of the vehicle.
         list_price: List price of the vehicle.
-        mass_driveable: Mass of the vehicle when drivable in KG.
+        mass_driveable: Mass of the vehicle when driveable in KG.
         mass_empty: Empty mass of the vehicle in KG.
         model: Model of the vehicle.
         name_registration_date: Date of naming registration of the vehicle.
