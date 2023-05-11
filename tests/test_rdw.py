@@ -15,7 +15,7 @@ async def test_json_request(aresponses: ResponsesMockServer) -> None:
     """Test JSON response is handled correctly."""
     aresponses.add(
         "opendata.rdw.nl",
-        f"/resource/{Dataset.PLATED_VEHICLES}.json",
+        "/resource/m9d7-ebf2.json",
         "GET",
         aresponses.Response(
             status=200,
@@ -34,7 +34,7 @@ async def test_internal_session(aresponses: ResponsesMockServer) -> None:
     """Test JSON response is handled correctly."""
     aresponses.add(
         "opendata.rdw.nl",
-        f"/resource/{Dataset.PLATED_VEHICLES}.json",
+        "/resource/m9d7-ebf2.json",
         "GET",
         aresponses.Response(
             status=200,
@@ -58,7 +58,7 @@ async def test_timeout(aresponses: ResponsesMockServer) -> None:
 
     aresponses.add(
         "opendata.rdw.nl",
-        f"/resource/{Dataset.PLATED_VEHICLES}.json",
+        "/resource/m9d7-ebf2.json",
         "GET",
         response_handler,
     )
@@ -73,7 +73,7 @@ async def test_http_error400(aresponses: ResponsesMockServer) -> None:
     """Test HTTP 404 response handling."""
     aresponses.add(
         "opendata.rdw.nl",
-        f"/resource/{Dataset.PLATED_VEHICLES}.json",
+        "/resource/m9d7-ebf2.json",
         "GET",
         aresponses.Response(text="OMG PUPPIES!", status=404),
     )
@@ -88,7 +88,7 @@ async def test_unexpected_response(aresponses: ResponsesMockServer) -> None:
     """Test unexpected response handling."""
     aresponses.add(
         "opendata.rdw.nl",
-        f"/resource/{Dataset.PLATED_VEHICLES}.json",
+        "/resource/m9d7-ebf2.json",
         "GET",
         aresponses.Response(text="OMG PUPPIES!", status=200),
     )

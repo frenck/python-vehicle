@@ -42,7 +42,7 @@ class RDW:
 
     async def _request(
         self,
-        dataset: str,
+        dataset: Dataset,
         *,
         data: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
@@ -68,7 +68,7 @@ class RDW:
             RDWError: Received an unexpected response from the Socrata API.
         """
         version = metadata.version(__package__)
-        url = URL("https://opendata.rdw.nl/resource/").join(URL(f"{dataset}.json"))
+        url = URL("https://opendata.rdw.nl/resource/").join(URL(f"{dataset.value}.json"))
 
         headers = {
             "User-Agent": f"PythonVehicle/{version}",
