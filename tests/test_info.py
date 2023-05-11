@@ -14,7 +14,6 @@ from vehicle import (
     VehicleOdometerJudgement,
     VehicleType,
 )
-from vehicle.const import Dataset
 
 from . import load_fixture
 
@@ -25,7 +24,7 @@ async def test_vehicle_data(  # pylint: disable=too-many-statements
     """Test getting Vehicle information."""
     aresponses.add(
         "opendata.rdw.nl",
-        f"/resource/{Dataset.PLATED_VEHICLES}.json",
+        "/resource/m9d7-ebf2.json",
         "GET",
         aresponses.Response(
             status=200,
@@ -65,7 +64,7 @@ async def test_vehicle_data(  # pylint: disable=too-many-statements
 
     aresponses.add(
         "opendata.rdw.nl",
-        f"/resource/{Dataset.PLATED_VEHICLES}.json",
+        "/resource/m9d7-ebf2.json",
         "GET",
         aresponses.Response(
             status=200,
@@ -108,7 +107,7 @@ async def test_no_vehicle(aresponses: ResponsesMockServer) -> None:
     """Test getting non-existing Vehicle."""
     aresponses.add(
         "opendata.rdw.nl",
-        f"/resource/{Dataset.PLATED_VEHICLES}.json",
+        "/resource/m9d7-ebf2.json",
         "GET",
         aresponses.Response(
             status=200,

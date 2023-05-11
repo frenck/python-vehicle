@@ -1,9 +1,9 @@
 """Asynchronous Python client providing RDW vehicle information."""
 
-from enum import Enum, StrEnum
+from enum import Enum
 
 
-class Dataset(StrEnum):
+class Dataset(str, Enum):
     """Enum holding the RDW dataset identifiers for the Socrata API."""
 
     PLATED_VEHICLES = "m9d7-ebf2"
