@@ -3,7 +3,14 @@ from __future__ import annotations
 
 from datetime import date, datetime, timezone
 
-from pydantic import BaseModel, Field, validator
+try:
+    from pydantic.v1 import BaseModel, Field, validator
+except ImportError:  # pragma: no cover
+    from pydantic import (  # type: ignore[assignment] # pragma: no cover
+        BaseModel,
+        Field,
+        validator,
+    )
 
 from .const import (
     VehicleInterior,  # noqa: TCH001
