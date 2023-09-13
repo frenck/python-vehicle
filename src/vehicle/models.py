@@ -25,6 +25,8 @@ class Vehicle(BaseModel):
     Attributes
     ----------
         apk_expiration: Expiry date of the APK.
+        ascription_date: Date of naming registration of the vehicle.
+        ascription_possible: Whether the vehicle is nameable or not.
         brand: Brand of the vehicle.
         energy_label: Energy label of the vehicle.
         engine_capacity: Engine capacity of the vehicle in CC
@@ -38,8 +40,6 @@ class Vehicle(BaseModel):
         mass_driveable: Mass of the vehicle when driveable in KG.
         mass_empty: Empty mass of the vehicle in KG.
         model: Model of the vehicle.
-        name_registration_date: Date of naming registration of the vehicle.
-        name_registration_possible: Whether the vehicle is nameable or not.
         number_of_cylinders: Number of cylinders of the vehicle.
         number_of_doors: Number of doors of the vehicle.
         number_of_seats: Number of seats of the vehicle.
