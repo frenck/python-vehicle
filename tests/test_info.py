@@ -18,7 +18,8 @@ from vehicle import (
 from . import load_fixture
 
 
-async def test_vehicle_data(  # pylint: disable=too-many-statements
+# pylint: disable-next=too-many-statements
+async def test_vehicle_data(  # noqa: PLR0915
     aresponses: ResponsesMockServer,
 ) -> None:
     """Test getting Vehicle information."""

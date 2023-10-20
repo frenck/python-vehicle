@@ -5,7 +5,7 @@ import asyncio
 import socket
 from dataclasses import dataclass
 from importlib import metadata
-from typing import Any, cast
+from typing import Any, Self, cast
 
 import async_timeout
 from aiohttp.client import ClientError, ClientResponseError, ClientSession
@@ -68,7 +68,9 @@ class RDW:
             RDWError: Received an unexpected response from the Socrata API.
         """
         version = metadata.version(__package__)
-        url = URL("https://opendata.rdw.nl/resource/").join(URL(f"{dataset.value}.json"))
+        url = URL("https://opendata.rdw.nl/resource/").join(
+            URL(f"{dataset.value}.json"),
+        )
 
         headers = {
             "User-Agent": f"PythonVehicle/{version}",
@@ -146,7 +148,7 @@ class RDW:
         if self.session and self._close_session:
             await self.session.close()
 
-    async def __aenter__(self) -> RDW:
+    async def __aenter__(self) -> Self:
         """Async enter.
 
         Returns
@@ -155,7 +157,7 @@ class RDW:
         """
         return self
 
-    async def __aexit__(self, *_exc_info: Any) -> None:
+    async def __aexit__(self, *_exc_info: object) -> None:
         """Async exit.
 
         Args:
