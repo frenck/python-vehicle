@@ -57,3 +57,32 @@
     'vehicle_type': <VehicleType.PASSENGER_CAR: 'Personenauto'>,
   })
 # ---
+# name: test_vehicle_data[VXJ99N]
+  dict({
+    'apk_expiration': None,
+    'ascription_date': None,
+    'ascription_possible': True,
+    'brand': 'Opel',
+    'energy_label': None,
+    'engine_capacity': 1997,
+    'exported': False,
+    'first_admission': None,
+    'interior': <VehicleInterior.CLOSED_INTERIOR: 'gesloten opbouw'>,
+    'last_odometer_registration_year': None,
+    'liability_insured': False,
+    'license_plate': 'VXJ99N',
+    'list_price': 55421,
+    'mass_driveable': 1845,
+    'mass_empty': 1745,
+    'model': 'Vivaro',
+    'number_of_cylinders': 4,
+    'number_of_doors': 2,
+    'number_of_seats': 6,
+    'number_of_wheelchair_seats': None,
+    'number_of_wheels': 4,
+    'odometer_judgement': None,
+    'pending_recall': False,
+    'taxi': False,
+    'vehicle_type': <VehicleType.COMPANY_CAR: 'Bedrijfsauto'>,
+  })
+# ---

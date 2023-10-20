@@ -20,6 +20,7 @@ from . import load_fixture
     [
         "11ZKZ3",
         "0001TJ",
+        "VXJ99N",
     ],
 )
 async def test_vehicle_data(
