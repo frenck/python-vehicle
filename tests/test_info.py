@@ -103,6 +103,46 @@ async def test_vehicle_data(  # noqa: PLR0915
         assert vehicle.taxi is False
         assert vehicle.vehicle_type == VehicleType.PASSENGER_CAR
 
+    aresponses.add(
+        "opendata.rdw.nl",
+        "/resource/m9d7-ebf2.json",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/json"},
+            text=load_fixture("VXJ99N.json"),
+        ),
+    )
+    async with aiohttp.ClientSession() as session:
+        rdw = RDW(session=session)
+        vehicle = await rdw.vehicle("VXJ-99-N")
+        assert vehicle
+        assert vehicle.apk_expiration is None
+        assert vehicle.ascription_date is None
+        assert vehicle.ascription_possible is True
+        assert vehicle.brand == "Opel"
+        assert vehicle.energy_label is None
+        assert vehicle.engine_capacity == 1997
+        assert vehicle.exported is False
+        assert vehicle.first_admission is None
+        assert vehicle.interior == VehicleInterior.CLOSED_INTERIOR
+        assert vehicle.last_odometer_registration_year is None
+        assert vehicle.liability_insured is False
+        assert vehicle.license_plate == "VXJ99N"
+        assert vehicle.list_price == 55421
+        assert vehicle.mass_driveable == 1845
+        assert vehicle.mass_empty == 1745
+        assert vehicle.model == "Vivaro"
+        assert vehicle.number_of_cylinders == 4
+        assert vehicle.number_of_doors == 2
+        assert vehicle.number_of_seats == 6
+        assert vehicle.number_of_wheelchair_seats is None
+        assert vehicle.number_of_wheels == 4
+        assert vehicle.odometer_judgement is None
+        assert vehicle.pending_recall is False
+        assert vehicle.taxi is False
+        assert vehicle.vehicle_type == VehicleType.COMPANY_CAR
+
 
 async def test_no_vehicle(aresponses: ResponsesMockServer) -> None:
     """Test getting non-existing Vehicle."""
