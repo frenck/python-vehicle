@@ -25,6 +25,8 @@ class Vehicle(BaseModel):
     Attributes
     ----------
         apk_expiration: Expiry date of the APK.
+        ascription_date: Date of naming registration of the vehicle.
+        ascription_possible: Whether the vehicle is nameable or not.
         brand: Brand of the vehicle.
         energy_label: Energy label of the vehicle.
         engine_capacity: Engine capacity of the vehicle in CC
@@ -38,8 +40,6 @@ class Vehicle(BaseModel):
         mass_driveable: Mass of the vehicle when driveable in KG.
         mass_empty: Empty mass of the vehicle in KG.
         model: Model of the vehicle.
-        name_registration_date: Date of naming registration of the vehicle.
-        name_registration_possible: Whether the vehicle is nameable or not.
         number_of_cylinders: Number of cylinders of the vehicle.
         number_of_doors: Number of doors of the vehicle.
         number_of_seats: Number of seats of the vehicle.
@@ -52,7 +52,7 @@ class Vehicle(BaseModel):
     """
 
     apk_expiration: date | None = Field(None, alias="vervaldatum_apk")
-    ascription_date: date = Field(..., alias="datum_tenaamstelling")
+    ascription_date: date | None = Field(None, alias="datum_tenaamstelling")
     ascription_possible: bool | None = Field(None, alias="tenaamstellen_mogelijk")
     brand: str = Field(..., alias="merk")
     energy_label: str | None = Field(None, alias="zuinigheidslabel")
@@ -66,7 +66,7 @@ class Vehicle(BaseModel):
     liability_insured: bool | None = Field(None, alias="wam_verzekerd")
     license_plate: str = Field(..., alias="kenteken")
     list_price: int | None = Field(None, alias="catalogusprijs")
-    first_admission: date = Field(..., alias="datum_eerste_toelating")
+    first_admission: date | None = Field(None, alias="datum_eerste_toelating")
     mass_empty: int | None = Field(None, alias="massa_ledig_voertuig")
     mass_driveable: int | None = Field(None, alias="massa_rijklaar")
     model: str = Field(..., alias="handelsbenaming")
