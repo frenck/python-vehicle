@@ -43,6 +43,7 @@ async def test_vehicle_data(
         rdw = RDW(session=session)
         vehicle: Vehicle = await rdw.vehicle(license_plate)
         assert vehicle == snapshot
+        assert vehicle.to_json() == snapshot
 
 
 async def test_no_vehicle(aresponses: ResponsesMockServer) -> None:

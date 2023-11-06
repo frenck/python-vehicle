@@ -20,9 +20,9 @@ from .const import (
 class StringIsBoolean(SerializationStrategy):
     """Boolean serialization strategy for Dutch textual strings."""
 
-    def serialize(self, value: bool) -> str:  # pragma: no cover  # noqa: FBT001
+    def serialize(self, value: bool) -> str:  # noqa: FBT001
         """Serialize a boolean to an Dutch string."""
-        raise NotImplementedError
+        return "Ja" if value else "Nee"
 
     def deserialize(self, value: str) -> bool:
         """Deserialize an Dutch string to a boolean."""
@@ -32,9 +32,9 @@ class StringIsBoolean(SerializationStrategy):
 class DateStrategy(SerializationStrategy):
     """String serialization strategy to handle the date format."""
 
-    def serialize(self, value: date) -> str:  # pragma: no cover
+    def serialize(self, value: date) -> str:
         """Serialize date to their specific format."""
-        raise NotImplementedError
+        return datetime.strftime(value, "%Y%m%d")
 
     def deserialize(self, value: str) -> date:
         """Deserialize their date format to a date."""
@@ -80,6 +80,7 @@ class Vehicle(DataClassORJSONMixin):
         """Mashumaro configuration."""
 
         serialization_strategy = {bool: StringIsBoolean(), date: DateStrategy()}  # noqa: RUF012
+        serialize_by_alias = True
 
     brand: str = field(metadata=field_options(alias="merk"))
     license_plate: str = field(metadata=field_options(alias="kenteken"))
