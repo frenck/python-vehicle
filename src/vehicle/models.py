@@ -13,9 +13,9 @@ except ImportError:  # pragma: no cover
     )
 
 from .const import (
-    VehicleInterior,  # noqa: TCH001
-    VehicleOdometerJudgement,  # noqa: TCH001
-    VehicleType,  # noqa: TCH001
+    VehicleInterior,
+    VehicleOdometerJudgement,
+    VehicleType,
 )
 
 
