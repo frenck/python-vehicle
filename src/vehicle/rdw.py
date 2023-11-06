@@ -5,9 +5,10 @@ import asyncio
 import socket
 from dataclasses import dataclass
 from importlib import metadata
-from typing import Any, Self, cast
+from typing import Any, Self
 
 import async_timeout
+import orjson
 from aiohttp.client import ClientError, ClientResponseError, ClientSession
 from aiohttp.hdrs import METH_GET
 from yarl import URL
@@ -45,7 +46,7 @@ class RDW:
         dataset: Dataset,
         *,
         data: dict[str, Any] | None = None,
-    ) -> dict[str, Any]:
+    ) -> str:
         """Handle a request to a RDW open data (Socrata).
 
         A generic method for sending/handling HTTP requests done against
@@ -101,15 +102,15 @@ class RDW:
             raise RDWConnectionError(msg) from exception
 
         content_type = response.headers.get("Content-Type", "")
+        text = await response.text()
         if "application/json" not in content_type:
-            text = await response.text()
             msg = "Unexpected response from the Socrata API"
             raise RDWError(
                 msg,
                 {"Content-Type": content_type, "response": text},
             )
 
-        return cast(dict[str, Any], await response.json())
+        return text
 
     async def vehicle(self, license_plate: str | None = None) -> Vehicle:
         """Get devices information about a Vehicle.
@@ -137,11 +138,13 @@ class RDW:
             Dataset.PLATED_VEHICLES,
             data={"kenteken": self.normalize_license_plate(license_plate)},
         )
-        if not data:
+        # pylint: disable=no-member
+        vehicles = orjson.loads(data)
+        if not vehicles:
             msg = f"License plate {license_plate} not found in RDW Socrata database"
             raise RDWUnknownLicensePlateError(msg)
 
-        return Vehicle.parse_obj(data[0])  # type: ignore[index]
+        return Vehicle.from_dict(vehicles[0])
 
     async def close(self) -> None:
         """Close open client session."""

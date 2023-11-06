@@ -1,16 +1,14 @@
 """Asynchronous Python client providing RDW vehicle information."""
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from datetime import date, datetime, timezone
+from typing import Any
 
-try:
-    from pydantic.v1 import BaseModel, Field, validator
-except ImportError:  # pragma: no cover
-    from pydantic import (  # type: ignore[assignment] # pragma: no cover
-        BaseModel,
-        Field,
-        validator,
-    )
+from mashumaro import field_options
+from mashumaro.config import BaseConfig
+from mashumaro.mixins.orjson import DataClassORJSONMixin
+from mashumaro.types import SerializationStrategy
 
 from .const import (
     VehicleInterior,
@@ -19,7 +17,33 @@ from .const import (
 )
 
 
-class Vehicle(BaseModel):
+class StringIsBoolean(SerializationStrategy):
+    """Boolean serialization strategy for Dutch textual strings."""
+
+    def serialize(self, value: bool) -> str:  # pragma: no cover  # noqa: FBT001
+        """Serialize a boolean to an Dutch string."""
+        raise NotImplementedError
+
+    def deserialize(self, value: str) -> bool:
+        """Deserialize an Dutch string to a boolean."""
+        return value == "Ja"
+
+
+class DateStrategy(SerializationStrategy):
+    """String serialization strategy to handle the date format."""
+
+    def serialize(self, value: date) -> str:  # pragma: no cover
+        """Serialize date to their specific format."""
+        raise NotImplementedError
+
+    def deserialize(self, value: str) -> date:
+        """Deserialize their date format to a date."""
+        return datetime.strptime(value, "%Y%m%d").replace(tzinfo=timezone.utc).date()
+
+
+@dataclass
+# pylint: disable-next=too-many-instance-attributes
+class Vehicle(DataClassORJSONMixin):
     """Object holding vehicle information.
 
     Attributes
@@ -51,125 +75,105 @@ class Vehicle(BaseModel):
         vehicle_type: Type of the vehicle.
     """
 
-    apk_expiration: date | None = Field(None, alias="vervaldatum_apk")
-    ascription_date: date | None = Field(None, alias="datum_tenaamstelling")
-    ascription_possible: bool | None = Field(None, alias="tenaamstellen_mogelijk")
-    brand: str = Field(..., alias="merk")
-    energy_label: str | None = Field(None, alias="zuinigheidslabel")
-    engine_capacity: int | None = Field(None, alias="cilinderinhoud")
-    exported: bool | None = Field(None, alias="export_indicator")
-    interior: VehicleInterior | None = Field(None, alias="inrichting")
-    last_odometer_registration_year: int | None = Field(
-        None,
-        alias="jaar_laatste_registratie_tellerstand",
-    )
-    liability_insured: bool | None = Field(None, alias="wam_verzekerd")
-    license_plate: str = Field(..., alias="kenteken")
-    list_price: int | None = Field(None, alias="catalogusprijs")
-    first_admission: date | None = Field(None, alias="datum_eerste_toelating")
-    mass_empty: int | None = Field(None, alias="massa_ledig_voertuig")
-    mass_driveable: int | None = Field(None, alias="massa_rijklaar")
-    model: str = Field(..., alias="handelsbenaming")
-    number_of_cylinders: int | None = Field(None, alias="aantal_cilinders")
-    number_of_doors: int | None = Field(None, alias="aantal_deuren")
-    number_of_seats: int | None = Field(None, alias="aantal_zitplaatsen")
-    number_of_wheelchair_seats: int | None = Field(
-        None,
-        alias="aantal_rolstoelplaatsen",
-    )
-    number_of_wheels: int | None = Field(None, alias="aantal_wielen")
-    odometer_judgement: VehicleOdometerJudgement = Field(
-        None,
-        alias="tellerstandoordeel",
-    )
-    pending_recall: bool | None = Field(
-        None,
-        alias="openstaande_terugroepactie_indicator",
-    )
-    taxi: bool | None = Field(None, alias="taxi_indicator")
-    vehicle_type: VehicleType | None = Field(None, alias="voertuigsoort")
+    # pylint: disable-next=too-few-public-methods
+    class Config(BaseConfig):
+        """Mashumaro configuration."""
 
-    @validator(
-        "apk_expiration",
-        "ascription_date",
-        "first_admission",
-        pre=True,
-        allow_reuse=True,
+        serialization_strategy = {bool: StringIsBoolean(), date: DateStrategy()}  # noqa: RUF012
+
+    brand: str = field(metadata=field_options(alias="merk"))
+    license_plate: str = field(metadata=field_options(alias="kenteken"))
+    model: str = field(metadata=field_options(alias="handelsbenaming"))
+    apk_expiration: date | None = field(
+        default=None, metadata=field_options(alias="vervaldatum_apk")
     )
+    ascription_date: date | None = field(
+        default=None, metadata=field_options(alias="datum_tenaamstelling")
+    )
+    ascription_possible: bool | None = field(
+        default=None, metadata=field_options(alias="tenaamstellen_mogelijk")
+    )
+    energy_label: str | None = field(
+        default=None, metadata=field_options(alias="zuinigheidslabel")
+    )
+    engine_capacity: int | None = field(
+        default=None, metadata=field_options(alias="cilinderinhoud")
+    )
+    exported: bool | None = field(
+        default=None, metadata=field_options(alias="export_indicator")
+    )
+    interior: VehicleInterior | None = field(
+        default=None, metadata=field_options(alias="inrichting")
+    )
+    last_odometer_registration_year: int | None = field(
+        default=None,
+        metadata=field_options(alias="jaar_laatste_registratie_tellerstand"),
+    )
+    liability_insured: bool | None = field(
+        default=None, metadata=field_options(alias="wam_verzekerd")
+    )
+    list_price: int | None = field(
+        default=None, metadata=field_options(alias="catalogusprijs")
+    )
+    first_admission: date | None = field(
+        default=None, metadata=field_options(alias="datum_eerste_toelating")
+    )
+    mass_empty: int | None = field(
+        default=None, metadata=field_options(alias="massa_ledig_voertuig")
+    )
+    mass_driveable: int | None = field(
+        default=None, metadata=field_options(alias="massa_rijklaar")
+    )
+    number_of_cylinders: int | None = field(
+        default=None, metadata=field_options(alias="aantal_cilinders")
+    )
+    number_of_doors: int | None = field(
+        default=None, metadata=field_options(alias="aantal_deuren")
+    )
+    number_of_seats: int | None = field(
+        default=None, metadata=field_options(alias="aantal_zitplaatsen")
+    )
+    number_of_wheelchair_seats: int | None = field(
+        default=None,
+        metadata=field_options(alias="aantal_rolstoelplaatsen"),
+    )
+    number_of_wheels: int | None = field(
+        default=None, metadata=field_options(alias="aantal_wielen")
+    )
+    odometer_judgement: VehicleOdometerJudgement | None = field(
+        default=None,
+        metadata=field_options(alias="tellerstandoordeel"),
+    )
+    pending_recall: bool | None = field(
+        default=None,
+        metadata=field_options(alias="openstaande_terugroepactie_indicator"),
+    )
+    taxi: bool | None = field(
+        default=None, metadata=field_options(alias="taxi_indicator")
+    )
+    vehicle_type: VehicleType | None = field(
+        default=None, metadata=field_options(alias="voertuigsoort")
+    )
+
     @classmethod
-    def parse_date(cls, value: str) -> date:
-        """Parse date from string.
+    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
+        """Handle some fields that have some weirdness.
 
         Args:
         ----
-            value: String to parse.
+            data: The values of the model.
 
         Returns:
         -------
-            Parsed date.
+            The adjusted values of the model.
         """
-        return datetime.strptime(value, "%Y%m%d").replace(tzinfo=timezone.utc).date()
+        # Convert certain values to None.
+        for key in ("inrichting", "tellerstandoordeel", "voertuigsoort"):
+            if d.get(key) in {"Niet geregistreerd", "N.v.t."}:
+                d[key] = None
 
-    @validator(
-        "ascription_possible",
-        "exported",
-        "liability_insured",
-        "pending_recall",
-        "taxi",
-        pre=True,
-        allow_reuse=True,
-    )
-    @classmethod
-    def parse_bool(cls, value: str) -> bool | None:
-        """Parse boolean from string.
+        # Make Brand and Model pretty
+        for key in ("merk", "handelsbenaming"):
+            d[key] = d[key].strip().title()
 
-        Args:
-        ----
-            value: String to parse.
-
-        Returns:
-        -------
-            Parsed boolean.
-        """
-        return value == "Ja"
-
-    @validator("brand", "model", allow_reuse=True)
-    @classmethod
-    def make_pretty(cls, value: str) -> str:
-        """Parse date from string.
-
-        Args:
-        ----
-            value: String to make pretty.
-
-        Returns:
-        -------
-            Pretty string.
-        """
-        return value.strip().title()
-
-    @validator(
-        "interior",
-        "odometer_judgement",
-        "vehicle_type",
-        pre=True,
-        allow_reuse=True,
-    )
-    @classmethod
-    def filter_empty(cls, value: str) -> str | None:
-        """Filter out empty values.
-
-        Args:
-        ----
-            value: String to filter.
-
-        Returns:
-        -------
-            Filtered string.
-        """
-        if value in {"Niet geregistreerd", "N.v.t."}:
-            return None
-        return value
-
-
-Vehicle.update_forward_refs()
+        return d

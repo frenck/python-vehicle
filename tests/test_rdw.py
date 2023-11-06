@@ -26,7 +26,7 @@ async def test_json_request(aresponses: ResponsesMockServer) -> None:
     async with aiohttp.ClientSession() as session:
         rdw = RDW(session=session)
         response = await rdw._request(Dataset.PLATED_VEHICLES)
-        assert response["status"] == "ok"
+        assert response == '{"status": "ok"}'
         await rdw.close()
 
 
@@ -44,7 +44,7 @@ async def test_internal_session(aresponses: ResponsesMockServer) -> None:
     )
     async with RDW() as rdw:
         response = await rdw._request(Dataset.PLATED_VEHICLES)
-        assert response["status"] == "ok"
+        assert response == '{"status": "ok"}'
 
 
 async def test_timeout(aresponses: ResponsesMockServer) -> None:
