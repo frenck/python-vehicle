@@ -109,7 +109,7 @@ max-line-length = 88
 addopts = "--cov"
 asyncio_mode = "auto"
 
-[tool.ruff]
+[tool.ruff.lint]
 ignore = [
   "ANN101",  # Self... explanatory
   "ANN102",  # cls... just as useless
@@ -126,11 +126,11 @@ ignore = [
 ]
 select = ["ALL"]
 
-[tool.ruff.flake8-pytest-style]
+[tool.ruff.lint.flake8-pytest-style]
 fixture-parentheses = false
 mark-parentheses = false
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 known-first-party = ["vehicle"]
 
 [tool.ruff.lint.flake8-type-checking]
@@ -138,7 +138,7 @@ runtime-evaluated-base-classes = [
   "mashumaro.mixins.orjson.DataClassORJSONMixin",
 ]
 
-[tool.ruff.mccabe]
+[tool.ruff.lint.mccabe]
 max-complexity = 25
 
 [build-system]

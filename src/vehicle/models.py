@@ -73,6 +73,7 @@ class Vehicle(DataClassORJSONMixin):
         pending_recall: Whether the vehicle has a pending recall or not.
         taxi: Whether the vehicle is a taxi or not.
         vehicle_type: Type of the vehicle.
+
     """
 
     # pylint: disable-next=too-few-public-methods
@@ -167,6 +168,7 @@ class Vehicle(DataClassORJSONMixin):
         Returns:
         -------
             The adjusted values of the model.
+
         """
         # Convert certain values to None.
         for key in ("inrichting", "tellerstandoordeel", "voertuigsoort"):

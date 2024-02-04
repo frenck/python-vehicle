@@ -37,6 +37,7 @@ class RDW:
         Returns:
         -------
             Normalized license plate.
+
         """
         return license_plate.upper().replace("-", "").replace(" ", "").strip()
 
@@ -66,6 +67,7 @@ class RDW:
             RDWConnectionError: An error occurred while communicating with
                 the Socrata API.
             RDWError: Received an unexpected response from the Socrata API.
+
         """
         version = metadata.version(__package__)
         url = URL("https://opendata.rdw.nl/resource/").join(
@@ -127,6 +129,7 @@ class RDW:
         ------
             RDWError: No license plate provided.
             RDWUnknownLicensePlateError: License plate not found in RDW Socrata DB.
+
         """
         license_plate = license_plate or self.license_plate
         if license_plate is None:
@@ -156,6 +159,7 @@ class RDW:
         Returns
         -------
             The RDW object.
+
         """
         return self
 
@@ -165,5 +169,6 @@ class RDW:
         Args:
         ----
             _exc_info: Exec type.
+
         """
         await self.close()
