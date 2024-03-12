@@ -1,4 +1,5 @@
 """Asynchronous Python client providing RDW vehicle information."""
+
 from pathlib import Path
 
 
