@@ -1,4 +1,5 @@
 """Tests for the vehicle Library."""
+
 # pylint: disable=protected-access
 import asyncio
 

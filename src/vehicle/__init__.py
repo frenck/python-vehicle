@@ -1,4 +1,5 @@
 """Asynchronous Python client providing RDW vehicle information."""
+
 from .const import VehicleInterior, VehicleOdometerJudgement, VehicleType
 from .exceptions import RDWConnectionError, RDWError, RDWUnknownLicensePlateError
 from .models import Vehicle
