@@ -17,6 +17,8 @@ from .const import Dataset
 from .exceptions import RDWConnectionError, RDWError, RDWUnknownLicensePlateError
 from .models import Vehicle
 
+VERSION = metadata.version(__package__)
+
 
 @dataclass
 class RDW:
@@ -70,13 +72,12 @@ class RDW:
             RDWError: Received an unexpected response from the Socrata API.
 
         """
-        version = metadata.version(__package__)
         url = URL("https://opendata.rdw.nl/resource/").join(
             URL(f"{dataset.value}.json"),
         )
 
         headers = {
-            "User-Agent": f"PythonVehicle/{version}",
+            "User-Agent": f"PythonVehicle/{VERSION}",
             "Accept": "application/json, text/plain, */*",
         }
 
