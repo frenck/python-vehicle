@@ -5,7 +5,6 @@ from __future__ import annotations
 import asyncio
 import socket
 from dataclasses import dataclass
-from importlib import metadata
 from typing import Any, Self
 
 import orjson
@@ -70,13 +69,11 @@ class RDW:
             RDWError: Received an unexpected response from the Socrata API.
 
         """
-        version = metadata.version(__package__)
         url = URL("https://opendata.rdw.nl/resource/").join(
             URL(f"{dataset.value}.json"),
         )
 
         headers = {
-            "User-Agent": f"PythonVehicle/{version}",
             "Accept": "application/json, text/plain, */*",
         }
 
