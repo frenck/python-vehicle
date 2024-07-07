@@ -5,7 +5,6 @@ from __future__ import annotations
 import asyncio
 import socket
 from dataclasses import dataclass
-from importlib import metadata
 from typing import Any, Self
 
 import orjson
@@ -16,8 +15,6 @@ from yarl import URL
 from .const import Dataset
 from .exceptions import RDWConnectionError, RDWError, RDWUnknownLicensePlateError
 from .models import Vehicle
-
-VERSION = metadata.version(__package__)
 
 
 @dataclass
@@ -77,7 +74,6 @@ class RDW:
         )
 
         headers = {
-            "User-Agent": f"PythonVehicle/{VERSION}",
             "Accept": "application/json, text/plain, */*",
         }
 
