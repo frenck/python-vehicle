@@ -6,7 +6,7 @@ class RDWError(Exception):
 
 
 class RDWUnknownLicensePlateError(RDWError):
-    """RDW connection exception."""
+    """RDW unknown license plate exception."""
 
 
 class RDWConnectionError(RDWError):

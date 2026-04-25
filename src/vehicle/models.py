@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from typing import Any
 
 from mashumaro import field_options
@@ -22,11 +22,11 @@ class StringIsBoolean(SerializationStrategy):
     """Boolean serialization strategy for Dutch textual strings."""
 
     def serialize(self, value: bool) -> str:  # noqa: FBT001
-        """Serialize a boolean to an Dutch string."""
+        """Serialize a boolean to a Dutch string."""
         return "Ja" if value else "Nee"
 
     def deserialize(self, value: str) -> bool:
-        """Deserialize an Dutch string to a boolean."""
+        """Deserialize a Dutch string to a boolean."""
         return value == "Ja"
 
 
@@ -39,7 +39,7 @@ class DateStrategy(SerializationStrategy):
 
     def deserialize(self, value: str) -> date:
         """Deserialize their date format to a date."""
-        return datetime.strptime(value, "%Y%m%d").replace(tzinfo=timezone.utc).date()
+        return datetime.strptime(value, "%Y%m%d").replace(tzinfo=UTC).date()
 
 
 @dataclass
@@ -164,7 +164,7 @@ class Vehicle(DataClassORJSONMixin):
 
         Args:
         ----
-            data: The values of the model.
+            d: The values of the model.
 
         Returns:
         -------
