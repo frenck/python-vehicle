@@ -1,18 +1,18 @@
 """Asynchronous Python client providing RDW vehicle information."""
 
-from enum import Enum
+from enum import StrEnum
 
 
-class Dataset(str, Enum):
+class Dataset(StrEnum):
     """Enum holding the RDW dataset identifiers for the Socrata API."""
 
     PLATED_VEHICLES = "m9d7-ebf2"
 
 
-class VehicleType(str, Enum):
+class VehicleType(StrEnum):
     """Enum holding the RDW vehicle types."""
 
-    TAILER = "Aanhangwagen"
+    TRAILER = "Aanhangwagen"
     PASSENGER_CAR = "Personenauto"
     COMPANY_CAR = "Bedrijfsauto"
     BUS = "Bus"
@@ -24,7 +24,7 @@ class VehicleType(str, Enum):
     AGRICULTURAL_OR_FORESTRY_TRACTOR_TRAILER = "Land- of bosb aanhw of getr uitr stuk"
 
 
-class VehicleInterior(str, Enum):
+class VehicleInterior(StrEnum):
     """Enum holding the RDW vehicle interior types."""
 
     CAMPER = "kampeerwagen"
@@ -43,7 +43,7 @@ class VehicleInterior(str, Enum):
     PICK_UP_TRUCK = "pick-up truck"
 
 
-class VehicleOdometerJudgement(str, Enum):
+class VehicleOdometerJudgement(StrEnum):
     """Enum holding the RDW vehicle odometer judgement types."""
 
     NO_JUDGEMENT = "Geen oordeel"

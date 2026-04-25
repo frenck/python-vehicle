@@ -1,0 +1,163 @@
+# serializer version: 1
+# name: test_cli_structure
+  list([
+    'license_plate',
+    'output_json',
+  ])
+# ---
+# name: test_connection_error_handler
+  '''
+  ╭──────────────────────── Connection error ────────────────────────╮
+  │                                                                  │
+  │     Could not connect to the RDW API. Please check your internet │
+  │     connection and try again.                                    │
+  │                                                                  │
+  ╰──────────────────────────────────────────────────────────────────╯
+  
+  '''
+# ---
+# name: test_lookup
+  '''
+              Vehicle 11ZKZ3             
+  ┏━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┓
+  ┃ Field                ┃ Value        ┃
+  ┡━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━┩
+  │ License plate        │ 11ZKZ3       │
+  │ Brand                │ Skoda        │
+  │ Model                │ Citigo       │
+  │ Vehicle type         │ Personenauto │
+  │ Interior             │ hatchback    │
+  │ First admission      │ 2013-01-04   │
+  │ APK expiration       │ 2022-01-04   │
+  │ Ascription date      │ 2021-11-04   │
+  │ Ascription possible  │ Yes          │
+  │ Engine capacity (cc) │ 999          │
+  │ Cylinders            │ 3            │
+  │ Doors                │ 0            │
+  │ Seats                │ 4            │
+  │ Wheelchair seats     │ 0            │
+  │ Wheels               │ 4            │
+  │ Mass empty (kg)      │ 840          │
+  │ Mass driveable (kg)  │ 940          │
+  │ List price           │ 10697        │
+  │ Energy label         │ A            │
+  │ Odometer judgement   │ Logisch      │
+  │ Last odometer year   │ 2021         │
+  │ Exported             │ No           │
+  │ Liability insured    │ No           │
+  │ Pending recall       │ No           │
+  │ Taxi                 │ No           │
+  └──────────────────────┴──────────────┘
+  
+  '''
+# ---
+# name: test_lookup_json
+  '''
+  {
+    "brand": "Skoda",
+    "license_plate": "11ZKZ3",
+    "model": "Citigo",
+    "apk_expiration": "2022-01-04",
+    "ascription_date": "2021-11-04",
+    "ascription_possible": true,
+    "energy_label": "A",
+    "engine_capacity": 999,
+    "exported": false,
+    "interior": "hatchback",
+    "last_odometer_registration_year": 2021,
+    "liability_insured": false,
+    "list_price": 10697,
+    "first_admission": "2013-01-04",
+    "mass_empty": 840,
+    "mass_driveable": 940,
+    "number_of_cylinders": 3,
+    "number_of_doors": 0,
+    "number_of_seats": 4,
+    "number_of_wheelchair_seats": 0,
+    "number_of_wheels": 4,
+    "odometer_judgement": "Logisch",
+    "pending_recall": false,
+    "taxi": false,
+    "vehicle_type": "Personenauto"
+  }
+  
+  '''
+# ---
+# name: test_lookup_minimal_vehicle
+  '''
+            Vehicle ABC123          
+  ┏━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┓
+  ┃ Field                ┃ Value   ┃
+  ┡━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━┩
+  │ License plate        │ ABC123  │
+  │ Brand                │ Tesla   │
+  │ Model                │ Model 3 │
+  │ Vehicle type         │ —       │
+  │ Interior             │ —       │
+  │ First admission      │ —       │
+  │ APK expiration       │ —       │
+  │ Ascription date      │ —       │
+  │ Ascription possible  │ —       │
+  │ Engine capacity (cc) │ —       │
+  │ Cylinders            │ —       │
+  │ Doors                │ —       │
+  │ Seats                │ —       │
+  │ Wheelchair seats     │ —       │
+  │ Wheels               │ —       │
+  │ Mass empty (kg)      │ —       │
+  │ Mass driveable (kg)  │ —       │
+  │ List price           │ —       │
+  │ Energy label         │ —       │
+  │ Odometer judgement   │ —       │
+  │ Last odometer year   │ —       │
+  │ Exported             │ —       │
+  │ Liability insured    │ —       │
+  │ Pending recall       │ —       │
+  │ Taxi                 │ —       │
+  └──────────────────────┴─────────┘
+  
+  '''
+# ---
+# name: test_lookup_minimal_vehicle_json
+  '''
+  {
+    "brand": "Tesla",
+    "license_plate": "ABC123",
+    "model": "Model 3",
+    "apk_expiration": null,
+    "ascription_date": null,
+    "ascription_possible": null,
+    "energy_label": null,
+    "engine_capacity": null,
+    "exported": null,
+    "interior": null,
+    "last_odometer_registration_year": null,
+    "liability_insured": null,
+    "list_price": null,
+    "first_admission": null,
+    "mass_empty": null,
+    "mass_driveable": null,
+    "number_of_cylinders": null,
+    "number_of_doors": null,
+    "number_of_seats": null,
+    "number_of_wheelchair_seats": null,
+    "number_of_wheels": null,
+    "odometer_judgement": null,
+    "pending_recall": null,
+    "taxi": null,
+    "vehicle_type": null
+  }
+  
+  '''
+# ---
+# name: test_unknown_plate_handler
+  '''
+  ╭───────────────────── License plate not found ─────────────────────╮
+  │                                                                   │
+  │     The provided license plate was not found in the RDW database. │
+  │     Please double-check the license plate and try again.          │
+  │                                                                   │
+  ╰───────────────────────────────────────────────────────────────────╯
+  
+  '''
+# ---

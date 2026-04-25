@@ -81,13 +81,14 @@ repos:
         name: ⮐  Fix End of Files
         language: system
         types: [text]
+        exclude: ^tests/(?:.*/)?__snapshots__/
         entry: poetry run end-of-file-fixer
         stages: [commit, push, manual]
-      - id: mypy
-        name: 🆎 Static type checking using mypy
+      - id: ty
+        name: 🆎 Static type checking using ty
         language: system
         types: [python]
-        entry: poetry run mypy
+        entry: poetry run ty check
         require_serial: true
       - id: no-commit-to-branch
         name: 🛑 Don't commit to main branch
@@ -118,12 +119,13 @@ repos:
         name: 🧪 Running tests and test coverage with pytest
         language: system
         types: [python]
-        entry: poetry run pytest
+        entry: poetry run pytest --cov vehicle tests
         pass_filenames: false
       - id: trailing-whitespace
         name: ✄  Trim Trailing Whitespace
         language: system
         types: [text]
+        exclude: ^tests/(?:.*/)?__snapshots__/
         entry: poetry run trailing-whitespace-fixer
         stages: [commit, push, manual]
       - id: yamllint
@@ -131,3 +133,9 @@ repos:
         language: system
         types: [yaml]
         entry: poetry run yamllint
+      - id: zizmor
+        name: 🌈 Check GitHub Actions workflows with zizmor
+        language: system
+        types: [yaml]
+        files: ^\.github/workflows/
+        entry: poetry run zizmor

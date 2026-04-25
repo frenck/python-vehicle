@@ -59,8 +59,7 @@ class RDW:
 
         Returns:
         -------
-            A Python dictionary (JSON decoded) with the response from
-            the API.
+            The response body as a string.
 
         Raises:
         ------
@@ -89,7 +88,7 @@ class RDW:
                     headers=headers,
                 )
                 response.raise_for_status()
-        except asyncio.TimeoutError as exception:
+        except TimeoutError as exception:
             msg = "Timeout occurred while connecting to the Socrata API"
             raise RDWConnectionError(msg) from exception
         except (
@@ -112,7 +111,7 @@ class RDW:
         return text
 
     async def vehicle(self, license_plate: str | None = None) -> Vehicle:
-        """Get devices information about a Vehicle.
+        """Get information about a vehicle.
 
         Args:
         ----
@@ -121,7 +120,7 @@ class RDW:
 
         Returns:
         -------
-            A Vehicle object, with information about the vehicle.
+            A Vehicle object with information about the vehicle.
 
         Raises:
         ------

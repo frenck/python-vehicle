@@ -8,7 +8,7 @@
 
 [![Build Status][build-shield]][build]
 [![Code Coverage][codecov-shield]][codecov]
-[![Quality Gate Status][sonarcloud-shield]][sonarcloud]
+[![OpenSSF Scorecard][scorecard-shield]][scorecard]
 [![Open in Dev Containers][devcontainer-shield]][devcontainer]
 
 [![Sponsor Frenck via GitHub Sponsors][github-sponsors-shield]][github-sponsors]
@@ -36,7 +36,7 @@ import asyncio
 from vehicle import RDW, Vehicle
 
 
-async def main():
+async def main() -> None:
     """Show example of fetching RDW vehicle info from Socrata API."""
     async with RDW() as rdw:
         vehicle: Vehicle = await rdw.vehicle(license_plate="11ZKZ3")
@@ -44,9 +44,55 @@ async def main():
 
 
 if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+    asyncio.run(main())
 ```
+
+## Command-line interface
+
+This package ships with an optional CLI that is handy for quickly looking
+up vehicle information. Install it with the `cli` extra:
+
+```bash
+pip install "vehicle[cli]"
+```
+
+Look up a vehicle by its license plate:
+
+```bash
+# Human-readable table output
+vehicle 11ZKZ3
+
+# Machine-readable JSON output
+vehicle 11ZKZ3 --json
+
+# Dashes and spaces in license plates are automatically normalized
+vehicle "11-ZKZ-3"
+```
+
+Run `vehicle --help` for the full reference.
+
+## Behavior & error handling
+
+Each API call is a single HTTP GET to the RDW open data (Socrata) API ---
+the client does **not** retry on transient failures. If you need retries
+with backoff, wrap the calls in your own retry loop (or use something
+like [`backoff`][backoff]).
+
+Requests are bounded by a per-call timeout, which defaults to 10 seconds
+and can be overridden via the `request_timeout` constructor argument:
+
+```python
+async with RDW(request_timeout=5) as rdw:
+    vehicle = await rdw.vehicle(license_plate="11ZKZ3")
+```
+
+All exceptions inherit from `RDWError`:
+
+| Exception                     | Raised when                                            |
+| ----------------------------- | ------------------------------------------------------ |
+| `RDWConnectionError`          | Request timed out or the network / API was unreachable |
+| `RDWUnknownLicensePlateError` | The license plate was not found in the RDW database    |
+| `RDWError`                    | Any other unexpected response from the API             |
 
 ## Changelog & Releases
 
@@ -72,7 +118,7 @@ We've set up a separate document for our
 
 Thank you for being involved! :heart_eyes:
 
-## Setting up a development environment
+## Setting up development environment
 
 The easiest way to start, is by opening a CodeSpace here on GitHub, or by using
 the [Dev Container][devcontainer] feature of Visual Studio Code.
@@ -85,7 +131,7 @@ You need at least:
 
 - Python 3.11+
 - [Poetry][poetry-install]
-- NodeJS 18+ (including NPM)
+- NodeJS 24+ (including NPM)
 
 To install all packages, including all development requirements:
 
@@ -94,12 +140,12 @@ npm install
 poetry install
 ```
 
-As this repository uses the [pre-commit][pre-commit] framework, all changes
+As this repository uses the [prek][prek] framework, all changes
 are linted and tested with each commit. You can run all checks and tests
 manually, using the following command:
 
 ```bash
-poetry run pre-commit run --all-files
+poetry run prek run --all-files
 ```
 
 To run just the Python tests:
@@ -119,7 +165,7 @@ check [the contributor's page][contributors].
 
 MIT License
 
-Copyright (c) 2021-2024 Franck Nijhof
+Copyright (c) 2021-2026 Franck Nijhof
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -139,6 +185,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+[backoff]: https://github.com/litl/backoff
 [build-shield]: https://github.com/frenck/python-vehicle/actions/workflows/tests.yaml/badge.svg
 [build]: https://github.com/frenck/python-vehicle/actions/workflows/tests.yaml
 [codecov-shield]: https://codecov.io/gh/frenck/python-vehicle/branch/main/graph/badge.svg
@@ -151,17 +198,17 @@ SOFTWARE.
 [github-sponsors]: https://github.com/sponsors/frenck
 [keepchangelog]: http://keepachangelog.com/en/1.0.0/
 [license-shield]: https://img.shields.io/github/license/frenck/python-vehicle.svg
-[maintenance-shield]: https://img.shields.io/maintenance/yes/2024.svg
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2026.svg
 [patreon-shield]: https://frenck.dev/wp-content/uploads/2019/12/patreon.png
 [patreon]: https://www.patreon.com/frenck
 [poetry-install]: https://python-poetry.org/docs/#installation
 [poetry]: https://python-poetry.org
-[pre-commit]: https://pre-commit.com/
+[prek]: https://github.com/j178/prek
 [project-stage-shield]: https://img.shields.io/badge/project%20stage-production%20ready-brightgreen.svg
 [pypi]: https://pypi.org/project/vehicle/
 [python-versions-shield]: https://img.shields.io/pypi/pyversions/vehicle
 [releases-shield]: https://img.shields.io/github/release/frenck/python-vehicle.svg
 [releases]: https://github.com/frenck/python-vehicle/releases
+[scorecard-shield]: https://api.scorecard.dev/projects/github.com/frenck/python-vehicle/badge
+[scorecard]: https://scorecard.dev/viewer/?uri=github.com/frenck/python-vehicle
 [semver]: http://semver.org/spec/v2.0.0.html
-[sonarcloud-shield]: https://sonarcloud.io/api/project_badges/measure?project=frenck_python-vehicle&metric=alert_status
-[sonarcloud]: https://sonarcloud.io/summary/new_code?id=frenck_python-vehicle
