@@ -11,11 +11,16 @@ from aioresponses import aioresponses
 from vehicle import RDW, Vehicle
 from vehicle.const import Dataset
 from vehicle.exceptions import RDWConnectionError, RDWError, RDWUnknownLicensePlateError
+from vehicle.models import Fuel, Recall
 
 from . import load_fixture
 
 RDW_URL = "https://opendata.rdw.nl/resource/m9d7-ebf2.json"
 RDW_URL_PATTERN = re.compile(r"https://opendata\.rdw\.nl/resource/m9d7-ebf2\.json.*")
+FUEL_URL_PATTERN = re.compile(r"https://opendata\.rdw\.nl/resource/8ys7-d773\.json.*")
+RECALLS_URL_PATTERN = re.compile(
+    r"https://opendata\.rdw\.nl/resource/t49b-isb7\.json.*"
+)
 
 
 async def test_json_request() -> None:
@@ -149,3 +154,113 @@ async def test_unknown_license_plate() -> None:
             rdw = RDW(session=session)
             with pytest.raises(RDWUnknownLicensePlateError, match="XX-XX-XX"):
                 await rdw.vehicle("XX-XX-XX")
+
+
+async def test_fuel() -> None:
+    """Test fetching fuel and emission information."""
+    with aioresponses() as mocked:
+        mocked.get(
+            FUEL_URL_PATTERN,
+            status=200,
+            body=load_fixture("fuel_11ZKZ3.json"),
+            content_type="application/json",
+        )
+        async with aiohttp.ClientSession() as session:
+            rdw = RDW(session=session)
+            fuels = await rdw.fuel("11ZKZ3")
+            assert len(fuels) == 1
+            assert isinstance(fuels[0], Fuel)
+            assert fuels[0].fuel_type == "Benzine"
+            assert fuels[0].co2_combined == 95
+            assert fuels[0].consumption_combined == 4.1
+            assert fuels[0].max_power == 44.0
+            assert fuels[0].emission_standard == "EURO 5"
+            assert fuels[0].noise_level_driving == 71
+            assert fuels[0].noise_level_stationary == 78
+
+
+async def test_fuel_electric() -> None:
+    """Test fetching fuel information for an electric vehicle."""
+    with aioresponses() as mocked:
+        mocked.get(
+            FUEL_URL_PATTERN,
+            status=200,
+            body=load_fixture("fuel_electric.json"),
+            content_type="application/json",
+        )
+        async with aiohttp.ClientSession() as session:
+            rdw = RDW(session=session)
+            fuels = await rdw.fuel("00BTV8")
+            assert len(fuels) == 1
+            fuel = fuels[0]
+            assert fuel.fuel_type == "Elektriciteit"
+            assert fuel.max_power_electric == 135.0
+            assert fuel.range_electric_wltp == 287
+            assert fuel.range_electric_city_wltp == 365
+            assert fuel.consumption_electric_wltp == 290.0
+            assert fuel.co2_emission_class == "5"
+
+
+async def test_fuel_empty() -> None:
+    """Test fetching fuel information when none is available."""
+    with aioresponses() as mocked:
+        mocked.get(
+            FUEL_URL_PATTERN,
+            status=200,
+            body=load_fixture("fuel_empty.json"),
+            content_type="application/json",
+        )
+        async with aiohttp.ClientSession() as session:
+            rdw = RDW(session=session)
+            fuels = await rdw.fuel("XX0000")
+            assert fuels == []
+
+
+async def test_recalls() -> None:
+    """Test fetching recall information."""
+    with aioresponses() as mocked:
+        mocked.get(
+            RECALLS_URL_PATTERN,
+            status=200,
+            body=load_fixture("recalls.json"),
+            content_type="application/json",
+        )
+        async with aiohttp.ClientSession() as session:
+            rdw = RDW(session=session)
+            recalls = await rdw.recalls("00BBL8")
+            assert len(recalls) == 2
+            assert isinstance(recalls[0], Recall)
+            assert recalls[0].reference_code == "MGP130086"
+            assert recalls[0].status_code == "P"
+            assert recalls[0].status == "Producent heeft herstel gemeld"
+            assert recalls[1].status_code == "O"
+            assert recalls[1].status == "Openstaande terugroepactie"
+
+
+async def test_recalls_empty() -> None:
+    """Test fetching recalls when none exist."""
+    with aioresponses() as mocked:
+        mocked.get(
+            RECALLS_URL_PATTERN,
+            status=200,
+            body=load_fixture("recalls_empty.json"),
+            content_type="application/json",
+        )
+        async with aiohttp.ClientSession() as session:
+            rdw = RDW(session=session)
+            recalls = await rdw.recalls("11ZKZ3")
+            assert recalls == []
+
+
+async def test_fuel_no_license_plate() -> None:
+    """Test fuel() raises when no license plate is provided."""
+    rdw = RDW()
+    with pytest.raises(RDWError, match="No license plate provided"):
+        await rdw.fuel()
+
+
+async def test_recalls_no_license_plate() -> None:
+    """Test recalls() raises when no license plate is provided."""
+    rdw = RDW()
+    with pytest.raises(RDWError, match="No license plate provided"):
+        await rdw.recalls()

@@ -22,6 +22,14 @@ Asynchronous Python client providing RDW vehicle information.
 This package allows you to get information from the RDW
 (Netherlands Vehicle Authority) about a specific vehicle by its license plate.
 
+It queries three RDW open data datasets:
+
+- **Vehicle information**: brand, model, color, dimensions, mass, APK status,
+  and more.
+- **Fuel & emissions**: fuel type, CO2, consumption, power, emission standard,
+  electric range, and WLTP data.
+- **Recalls**: open and resolved recall actions.
+
 ## Installation
 
 ```bash
@@ -41,6 +49,16 @@ async def main() -> None:
     async with RDW() as rdw:
         vehicle: Vehicle = await rdw.vehicle(license_plate="11ZKZ3")
         print(vehicle)
+
+        # Fuel and emission data (can return multiple entries for hybrids)
+        fuels = await rdw.fuel(license_plate="11ZKZ3")
+        for fuel in fuels:
+            print(fuel.fuel_type, fuel.co2_combined, fuel.max_power)
+
+        # Recall status
+        recalls = await rdw.recalls(license_plate="11ZKZ3")
+        for recall in recalls:
+            print(recall.reference_code, recall.status)
 
 
 if __name__ == "__main__":
@@ -73,7 +91,7 @@ Run `vehicle --help` for the full reference.
 
 ## Behavior & error handling
 
-Each API call is a single HTTP GET to the RDW open data (Socrata) API ---
+Each API call is a single HTTP GET to the RDW open data (Socrata) API;
 the client does **not** retry on transient failures. If you need retries
 with backoff, wrap the calls in your own retry loop (or use something
 like [`backoff`][backoff]).
