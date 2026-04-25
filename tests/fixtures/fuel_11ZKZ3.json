@@ -1,0 +1,17 @@
+[
+  {
+    "kenteken": "11ZKZ3",
+    "brandstof_volgnummer": "1",
+    "brandstof_omschrijving": "Benzine",
+    "brandstofverbruik_buiten": "3.60",
+    "brandstofverbruik_gecombineerd": "4.10",
+    "brandstofverbruik_stad": "5.00",
+    "co2_uitstoot_gecombineerd": "95",
+    "geluidsniveau_rijdend": "71",
+    "geluidsniveau_stationair": "78",
+    "emissiecode_omschrijving": "5",
+    "nettomaximumvermogen": "44.00",
+    "toerental_geluidsniveau": "3750",
+    "uitlaatemissieniveau": "EURO 5"
+  }
+]

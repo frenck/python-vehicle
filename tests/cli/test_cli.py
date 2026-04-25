@@ -10,7 +10,7 @@ import pytest
 from typer.main import get_command
 from typer.testing import CliRunner
 
-from vehicle import Vehicle
+from vehicle import Fuel, Vehicle
 from vehicle.cli import cli
 from vehicle.exceptions import RDWConnectionError, RDWUnknownLicensePlateError
 
@@ -32,10 +32,14 @@ def runner() -> CliRunner:
     return CliRunner()
 
 
-def mock_rdw_class(vehicle_data: Vehicle) -> MagicMock:
+def mock_rdw_class(
+    vehicle_data: Vehicle,
+    fuel_data: list[Fuel] | None = None,
+) -> MagicMock:
     """Return a MagicMock that stands in for the RDW class."""
     client = AsyncMock()
     client.vehicle.return_value = vehicle_data
+    client.fuel.return_value = fuel_data or []
 
     instance = AsyncMock()
     instance.__aenter__.return_value = client
@@ -48,9 +52,10 @@ def invoke(
     runner: CliRunner,
     args: list[str],
     vehicle_data: Vehicle,
+    fuel_data: list[Fuel] | None = None,
 ) -> tuple[int, str, MagicMock]:
     """Invoke the CLI with a mocked RDW class and return the result."""
-    mock_cls = mock_rdw_class(vehicle_data)
+    mock_cls = mock_rdw_class(vehicle_data, fuel_data)
     with patch("vehicle.cli.RDW", mock_cls):
         result = runner.invoke(cli, args)
     return result.exit_code, result.stdout, mock_cls
@@ -71,6 +76,13 @@ def sample_vehicle() -> Vehicle:
             "cilinderinhoud": 999,
             "export_indicator": "Nee",
             "inrichting": "hatchback",
+            "eerste_kleur": "GRIJS",
+            "tweede_kleur": "Niet geregistreerd",
+            "europese_voertuigcategorie": "M1",
+            "lengte": 356,
+            "wielbasis": 241,
+            "toegestane_maximum_massa_voertuig": 1290,
+            "datum_eerste_tenaamstelling_in_nederland": "20130104",
             "jaar_laatste_registratie_tellerstand": 2021,
             "wam_verzekerd": "Nee",
             "catalogusprijs": 10697,
@@ -90,6 +102,26 @@ def sample_vehicle() -> Vehicle:
     )
 
 
+@pytest.fixture
+def sample_fuel() -> list[Fuel]:
+    """Return a sample Fuel list for CLI tests."""
+    return [
+        Fuel.from_dict(
+            {
+                "brandstof_omschrijving": "Benzine",
+                "brandstofverbruik_buiten": "3.60",
+                "brandstofverbruik_gecombineerd": "4.10",
+                "brandstofverbruik_stad": "5.00",
+                "co2_uitstoot_gecombineerd": "95",
+                "geluidsniveau_rijdend": "71",
+                "geluidsniveau_stationair": "78",
+                "nettomaximumvermogen": "44.00",
+                "uitlaatemissieniveau": "EURO 5",
+            }
+        )
+    ]
+
+
 def test_cli_structure(snapshot: SnapshotAssertion) -> None:
     """The CLI exposes the expected parameters."""
     command = get_command(cli)
@@ -100,13 +132,15 @@ def test_cli_structure(snapshot: SnapshotAssertion) -> None:
 def test_lookup(
     runner: CliRunner,
     sample_vehicle: Vehicle,
+    sample_fuel: list[Fuel],
     snapshot: SnapshotAssertion,
 ) -> None:
-    """Lookup prints a table of vehicle information."""
+    """Lookup prints a table of vehicle and fuel information."""
     exit_code, output, _ = invoke(
         runner,
         ["11ZKZ3"],
         sample_vehicle,
+        sample_fuel,
     )
     assert exit_code == 0
     assert output == snapshot
@@ -115,6 +149,7 @@ def test_lookup(
 def test_lookup_json(
     runner: CliRunner,
     sample_vehicle: Vehicle,
+    sample_fuel: list[Fuel],
     snapshot: SnapshotAssertion,
 ) -> None:
     """Lookup emits JSON when --json is given."""
@@ -122,6 +157,7 @@ def test_lookup_json(
         runner,
         ["11ZKZ3", "--json"],
         sample_vehicle,
+        sample_fuel,
     )
     assert exit_code == 0
     assert output == snapshot

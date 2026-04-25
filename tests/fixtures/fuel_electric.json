@@ -1,0 +1,16 @@
+[
+  {
+    "kenteken": "00BTV8",
+    "brandstof_volgnummer": "1",
+    "brandstof_omschrijving": "Elektriciteit",
+    "geluidsniveau_rijdend": "68",
+    "emissiecode_omschrijving": "Z",
+    "nominaal_continu_maximumvermogen": "100.00",
+    "elektrisch_verbruik_enkel_elektrisch_wltp": "290.00",
+    "actie_radius_enkel_elektrisch_wltp": "287",
+    "actie_radius_enkel_elektrisch_stad_wltp": "365",
+    "netto_max_vermogen_elektrisch": "135.00",
+    "uitlaatemissieniveau": "AX",
+    "co2_emissieklasse": "5"
+  }
+]

@@ -17,6 +17,8 @@ from .const import (
     VehicleType,
 )
 
+_NOT_REGISTERED = {"Niet geregistreerd", "N.v.t."}
+
 
 class StringIsBoolean(SerializationStrategy):
     """Boolean serialization strategy for Dutch textual strings."""
@@ -54,16 +56,20 @@ class Vehicle(DataClassORJSONMixin):
         ascription_possible: Whether the vehicle is nameable or not.
         brand: Brand of the vehicle.
         energy_label: Energy label of the vehicle.
-        engine_capacity: Engine capacity of the vehicle in CC
+        engine_capacity: Engine capacity of the vehicle in CC.
+        european_vehicle_category: EU vehicle category (e.g. M1, N1, L).
         exported: Whether the vehicle is exported or not.
         first_admission: First date of registration.
+        first_admission_netherlands: First registration date in the Netherlands.
         interior: Interior of the vehicle.
         last_odometer_registration_year: Last year odometer was registered.
+        length: Length of the vehicle in cm.
         liability_insured: Whether the vehicle is insured or not.
         license_plate: Normalized license plate of the vehicle.
         list_price: List price of the vehicle.
-        mass_driveable: Mass of the vehicle when driveable in KG.
-        mass_empty: Empty mass of the vehicle in KG.
+        mass_driveable: Mass of the vehicle when driveable in kg.
+        mass_empty: Empty mass of the vehicle in kg.
+        maximum_permitted_mass: Maximum permitted mass in kg.
         model: Model of the vehicle.
         number_of_cylinders: Number of cylinders of the vehicle.
         number_of_doors: Number of doors of the vehicle.
@@ -72,8 +78,11 @@ class Vehicle(DataClassORJSONMixin):
         number_of_wheels: Number of wheels of the vehicle.
         odometer_judgement: Odometer judgement of the vehicle.
         pending_recall: Whether the vehicle has a pending recall or not.
+        primary_color: Primary color of the vehicle.
+        secondary_color: Secondary color of the vehicle.
         taxi: Whether the vehicle is a taxi or not.
         vehicle_type: Type of the vehicle.
+        wheelbase: Wheelbase of the vehicle in cm.
 
     """
 
@@ -102,8 +111,18 @@ class Vehicle(DataClassORJSONMixin):
     engine_capacity: int | None = field(
         default=None, metadata=field_options(alias="cilinderinhoud")
     )
+    european_vehicle_category: str | None = field(
+        default=None, metadata=field_options(alias="europese_voertuigcategorie")
+    )
     exported: bool | None = field(
         default=None, metadata=field_options(alias="export_indicator")
+    )
+    first_admission: date | None = field(
+        default=None, metadata=field_options(alias="datum_eerste_toelating")
+    )
+    first_admission_netherlands: date | None = field(
+        default=None,
+        metadata=field_options(alias="datum_eerste_tenaamstelling_in_nederland"),
     )
     interior: VehicleInterior | None = field(
         default=None, metadata=field_options(alias="inrichting")
@@ -112,20 +131,22 @@ class Vehicle(DataClassORJSONMixin):
         default=None,
         metadata=field_options(alias="jaar_laatste_registratie_tellerstand"),
     )
+    length: int | None = field(default=None, metadata=field_options(alias="lengte"))
     liability_insured: bool | None = field(
         default=None, metadata=field_options(alias="wam_verzekerd")
     )
     list_price: int | None = field(
         default=None, metadata=field_options(alias="catalogusprijs")
     )
-    first_admission: date | None = field(
-        default=None, metadata=field_options(alias="datum_eerste_toelating")
+    mass_driveable: int | None = field(
+        default=None, metadata=field_options(alias="massa_rijklaar")
     )
     mass_empty: int | None = field(
         default=None, metadata=field_options(alias="massa_ledig_voertuig")
     )
-    mass_driveable: int | None = field(
-        default=None, metadata=field_options(alias="massa_rijklaar")
+    maximum_permitted_mass: int | None = field(
+        default=None,
+        metadata=field_options(alias="toegestane_maximum_massa_voertuig"),
     )
     number_of_cylinders: int | None = field(
         default=None, metadata=field_options(alias="aantal_cilinders")
@@ -151,11 +172,20 @@ class Vehicle(DataClassORJSONMixin):
         default=None,
         metadata=field_options(alias="openstaande_terugroepactie_indicator"),
     )
+    primary_color: str | None = field(
+        default=None, metadata=field_options(alias="eerste_kleur")
+    )
+    secondary_color: str | None = field(
+        default=None, metadata=field_options(alias="tweede_kleur")
+    )
     taxi: bool | None = field(
         default=None, metadata=field_options(alias="taxi_indicator")
     )
     vehicle_type: VehicleType | None = field(
         default=None, metadata=field_options(alias="voertuigsoort")
+    )
+    wheelbase: int | None = field(
+        default=None, metadata=field_options(alias="wielbasis")
     )
 
     @classmethod
@@ -172,12 +202,126 @@ class Vehicle(DataClassORJSONMixin):
 
         """
         # Convert certain values to None.
-        for key in ("inrichting", "tellerstandoordeel", "voertuigsoort"):
-            if d.get(key) in {"Niet geregistreerd", "N.v.t."}:
+        for key in (
+            "eerste_kleur",
+            "inrichting",
+            "tellerstandoordeel",
+            "tweede_kleur",
+            "voertuigsoort",
+        ):
+            if d.get(key) in _NOT_REGISTERED:
                 d[key] = None
 
         # Make Brand and Model pretty
         for key in ("merk", "handelsbenaming"):
             d[key] = d[key].strip().title()
 
+        # Title-case colors
+        for key in ("eerste_kleur", "tweede_kleur"):
+            if d.get(key) is not None:
+                d[key] = d[key].strip().title()
+
         return d
+
+
+@dataclass
+# pylint: disable-next=too-many-instance-attributes
+class Fuel(DataClassORJSONMixin):
+    """Object holding fuel and emission information for a vehicle.
+
+    A vehicle can have multiple fuel entries (e.g., a hybrid has both
+    a combustion engine and an electric motor).
+
+    Attributes
+    ----------
+        fuel_type: Fuel type description (e.g. Benzine, Diesel, Elektriciteit).
+        co2_combined: Combined CO2 emissions in g/km.
+        co2_emission_class: CO2 emission class.
+        consumption_combined: Combined fuel consumption in l/100km.
+        consumption_city: City fuel consumption in l/100km.
+        consumption_highway: Highway fuel consumption in l/100km.
+        consumption_electric_wltp: Electric consumption in Wh/km (WLTP).
+        emission_standard: Emission standard (e.g. EURO 5, EURO 6).
+        hybrid_electric_class: Hybrid/electric class (OVC-HEV, NOVC-HEV).
+        max_power: Net maximum power in kW.
+        max_power_electric: Net maximum electric power in kW.
+        noise_level_driving: Noise level while driving in dB.
+        noise_level_stationary: Noise level while stationary in dB.
+        range: Range in km.
+        range_electric_city_wltp: Electric-only city range in km (WLTP).
+        range_electric_wltp: Electric-only range in km (WLTP).
+        range_externally_chargeable: Range when externally charged in km.
+
+    """
+
+    fuel_type: str = field(metadata=field_options(alias="brandstof_omschrijving"))
+    co2_combined: int | None = field(
+        default=None, metadata=field_options(alias="co2_uitstoot_gecombineerd")
+    )
+    co2_emission_class: str | None = field(
+        default=None, metadata=field_options(alias="co2_emissieklasse")
+    )
+    consumption_combined: float | None = field(
+        default=None,
+        metadata=field_options(alias="brandstofverbruik_gecombineerd"),
+    )
+    consumption_city: float | None = field(
+        default=None, metadata=field_options(alias="brandstofverbruik_stad")
+    )
+    consumption_highway: float | None = field(
+        default=None, metadata=field_options(alias="brandstofverbruik_buiten")
+    )
+    consumption_electric_wltp: float | None = field(
+        default=None,
+        metadata=field_options(alias="elektrisch_verbruik_enkel_elektrisch_wltp"),
+    )
+    emission_standard: str | None = field(
+        default=None, metadata=field_options(alias="uitlaatemissieniveau")
+    )
+    hybrid_electric_class: str | None = field(
+        default=None,
+        metadata=field_options(alias="klasse_hybride_elektrisch_voertuig"),
+    )
+    max_power: float | None = field(
+        default=None, metadata=field_options(alias="nettomaximumvermogen")
+    )
+    max_power_electric: float | None = field(
+        default=None,
+        metadata=field_options(alias="netto_max_vermogen_elektrisch"),
+    )
+    noise_level_driving: int | None = field(
+        default=None, metadata=field_options(alias="geluidsniveau_rijdend")
+    )
+    noise_level_stationary: int | None = field(
+        default=None, metadata=field_options(alias="geluidsniveau_stationair")
+    )
+    range: int | None = field(default=None, metadata=field_options(alias="actieradius"))
+    range_electric_city_wltp: int | None = field(
+        default=None,
+        metadata=field_options(alias="actie_radius_enkel_elektrisch_stad_wltp"),
+    )
+    range_electric_wltp: int | None = field(
+        default=None,
+        metadata=field_options(alias="actie_radius_enkel_elektrisch_wltp"),
+    )
+    range_externally_chargeable: int | None = field(
+        default=None,
+        metadata=field_options(alias="actieradius_extern_oplaadbaar"),
+    )
+
+
+@dataclass
+class Recall(DataClassORJSONMixin):
+    """Object holding recall information for a vehicle.
+
+    Attributes
+    ----------
+        reference_code: RDW reference code for the recall.
+        status: Human-readable status description.
+        status_code: Single-character status code (O=open, P=repaired).
+
+    """
+
+    reference_code: str = field(metadata=field_options(alias="referentiecode_rdw"))
+    status: str = field(metadata=field_options(alias="status"))
+    status_code: str = field(metadata=field_options(alias="code_status"))

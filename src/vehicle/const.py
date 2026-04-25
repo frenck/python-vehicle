@@ -7,6 +7,8 @@ class Dataset(StrEnum):
     """Enum holding the RDW dataset identifiers for the Socrata API."""
 
     PLATED_VEHICLES = "m9d7-ebf2"
+    FUEL = "8ys7-d773"
+    RECALLS = "t49b-isb7"
 
 
 class VehicleType(StrEnum):

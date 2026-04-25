@@ -18,36 +18,57 @@
 # ---
 # name: test_lookup
   '''
-              Vehicle 11ZKZ3             
-  ┏━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┓
-  ┃ Field                ┃ Value        ┃
-  ┡━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━┩
-  │ License plate        │ 11ZKZ3       │
-  │ Brand                │ Skoda        │
-  │ Model                │ Citigo       │
-  │ Vehicle type         │ Personenauto │
-  │ Interior             │ hatchback    │
-  │ First admission      │ 2013-01-04   │
-  │ APK expiration       │ 2022-01-04   │
-  │ Ascription date      │ 2021-11-04   │
-  │ Ascription possible  │ Yes          │
-  │ Engine capacity (cc) │ 999          │
-  │ Cylinders            │ 3            │
-  │ Doors                │ 0            │
-  │ Seats                │ 4            │
-  │ Wheelchair seats     │ 0            │
-  │ Wheels               │ 4            │
-  │ Mass empty (kg)      │ 840          │
-  │ Mass driveable (kg)  │ 940          │
-  │ List price           │ 10697        │
-  │ Energy label         │ A            │
-  │ Odometer judgement   │ Logisch      │
-  │ Last odometer year   │ 2021         │
-  │ Exported             │ No           │
-  │ Liability insured    │ No           │
-  │ Pending recall       │ No           │
-  │ Taxi                 │ No           │
-  └──────────────────────┴──────────────┘
+                Vehicle 11ZKZ3              
+  ┏━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┓
+  ┃ Field                   ┃ Value        ┃
+  ┡━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━┩
+  │ License plate           │ 11ZKZ3       │
+  │ Brand                   │ Skoda        │
+  │ Model                   │ Citigo       │
+  │ Vehicle type            │ Personenauto │
+  │ Interior                │ hatchback    │
+  │ Primary color           │ Grijs        │
+  │ Secondary color         │ —            │
+  │ First admission         │ 2013-01-04   │
+  │ First admission (NL)    │ 2013-01-04   │
+  │ APK expiration          │ 2022-01-04   │
+  │ Ascription date         │ 2021-11-04   │
+  │ Ascription possible     │ Yes          │
+  │ EU category             │ M1           │
+  │ Engine capacity (cc)    │ 999          │
+  │ Cylinders               │ 3            │
+  │ Doors                   │ 0            │
+  │ Seats                   │ 4            │
+  │ Wheelchair seats        │ 0            │
+  │ Wheels                  │ 4            │
+  │ Length (cm)             │ 356          │
+  │ Wheelbase (cm)          │ 241          │
+  │ Mass empty (kg)         │ 840          │
+  │ Mass driveable (kg)     │ 940          │
+  │ Max permitted mass (kg) │ 1290         │
+  │ List price              │ 10697        │
+  │ Energy label            │ A            │
+  │ Odometer judgement      │ Logisch      │
+  │ Last odometer year      │ 2021         │
+  │ Exported                │ No           │
+  │ Liability insured       │ No           │
+  │ Pending recall          │ No           │
+  │ Taxi                    │ No           │
+  └─────────────────────────┴──────────────┘
+                 Fuel: Benzine                
+  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┓
+  ┃ Field                          ┃ Value   ┃
+  ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━┩
+  │ Fuel type                      │ Benzine │
+  │ Power (kW)                     │ 44.0    │
+  │ Emission standard              │ EURO 5  │
+  │ CO₂ combined (g/km)            │ 95      │
+  │ Consumption combined (l/100km) │ 4.1     │
+  │ Consumption city (l/100km)     │ 5.0     │
+  │ Consumption highway (l/100km)  │ 3.6     │
+  │ Noise driving (dB)             │ 71      │
+  │ Noise stationary (dB)          │ 78      │
+  └────────────────────────────────┴─────────┘
   
   '''
 # ---
@@ -62,14 +83,18 @@
     "ascription_possible": true,
     "energy_label": "A",
     "engine_capacity": 999,
+    "european_vehicle_category": "M1",
     "exported": false,
+    "first_admission": "2013-01-04",
+    "first_admission_netherlands": "2013-01-04",
     "interior": "hatchback",
     "last_odometer_registration_year": 2021,
+    "length": 356,
     "liability_insured": false,
     "list_price": 10697,
-    "first_admission": "2013-01-04",
-    "mass_empty": 840,
     "mass_driveable": 940,
+    "mass_empty": 840,
+    "maximum_permitted_mass": 1290,
     "number_of_cylinders": 3,
     "number_of_doors": 0,
     "number_of_seats": 4,
@@ -77,44 +102,75 @@
     "number_of_wheels": 4,
     "odometer_judgement": "Logisch",
     "pending_recall": false,
+    "primary_color": "Grijs",
+    "secondary_color": null,
     "taxi": false,
-    "vehicle_type": "Personenauto"
+    "vehicle_type": "Personenauto",
+    "wheelbase": 241,
+    "fuel": [
+      {
+        "fuel_type": "Benzine",
+        "co2_combined": 95,
+        "co2_emission_class": null,
+        "consumption_combined": 4.1,
+        "consumption_city": 5.0,
+        "consumption_highway": 3.6,
+        "consumption_electric_wltp": null,
+        "emission_standard": "EURO 5",
+        "hybrid_electric_class": null,
+        "max_power": 44.0,
+        "max_power_electric": null,
+        "noise_level_driving": 71,
+        "noise_level_stationary": 78,
+        "range": null,
+        "range_electric_city_wltp": null,
+        "range_electric_wltp": null,
+        "range_externally_chargeable": null
+      }
+    ]
   }
   
   '''
 # ---
 # name: test_lookup_minimal_vehicle
   '''
-            Vehicle ABC123          
-  ┏━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┓
-  ┃ Field                ┃ Value   ┃
-  ┡━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━┩
-  │ License plate        │ ABC123  │
-  │ Brand                │ Tesla   │
-  │ Model                │ Model 3 │
-  │ Vehicle type         │ —       │
-  │ Interior             │ —       │
-  │ First admission      │ —       │
-  │ APK expiration       │ —       │
-  │ Ascription date      │ —       │
-  │ Ascription possible  │ —       │
-  │ Engine capacity (cc) │ —       │
-  │ Cylinders            │ —       │
-  │ Doors                │ —       │
-  │ Seats                │ —       │
-  │ Wheelchair seats     │ —       │
-  │ Wheels               │ —       │
-  │ Mass empty (kg)      │ —       │
-  │ Mass driveable (kg)  │ —       │
-  │ List price           │ —       │
-  │ Energy label         │ —       │
-  │ Odometer judgement   │ —       │
-  │ Last odometer year   │ —       │
-  │ Exported             │ —       │
-  │ Liability insured    │ —       │
-  │ Pending recall       │ —       │
-  │ Taxi                 │ —       │
-  └──────────────────────┴─────────┘
+             Vehicle ABC123            
+  ┏━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┓
+  ┃ Field                   ┃ Value   ┃
+  ┡━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━┩
+  │ License plate           │ ABC123  │
+  │ Brand                   │ Tesla   │
+  │ Model                   │ Model 3 │
+  │ Vehicle type            │ —       │
+  │ Interior                │ —       │
+  │ Primary color           │ —       │
+  │ Secondary color         │ —       │
+  │ First admission         │ —       │
+  │ First admission (NL)    │ —       │
+  │ APK expiration          │ —       │
+  │ Ascription date         │ —       │
+  │ Ascription possible     │ —       │
+  │ EU category             │ —       │
+  │ Engine capacity (cc)    │ —       │
+  │ Cylinders               │ —       │
+  │ Doors                   │ —       │
+  │ Seats                   │ —       │
+  │ Wheelchair seats        │ —       │
+  │ Wheels                  │ —       │
+  │ Length (cm)             │ —       │
+  │ Wheelbase (cm)          │ —       │
+  │ Mass empty (kg)         │ —       │
+  │ Mass driveable (kg)     │ —       │
+  │ Max permitted mass (kg) │ —       │
+  │ List price              │ —       │
+  │ Energy label            │ —       │
+  │ Odometer judgement      │ —       │
+  │ Last odometer year      │ —       │
+  │ Exported                │ —       │
+  │ Liability insured       │ —       │
+  │ Pending recall          │ —       │
+  │ Taxi                    │ —       │
+  └─────────────────────────┴─────────┘
   
   '''
 # ---
@@ -129,14 +185,18 @@
     "ascription_possible": null,
     "energy_label": null,
     "engine_capacity": null,
+    "european_vehicle_category": null,
     "exported": null,
+    "first_admission": null,
+    "first_admission_netherlands": null,
     "interior": null,
     "last_odometer_registration_year": null,
+    "length": null,
     "liability_insured": null,
     "list_price": null,
-    "first_admission": null,
-    "mass_empty": null,
     "mass_driveable": null,
+    "mass_empty": null,
+    "maximum_permitted_mass": null,
     "number_of_cylinders": null,
     "number_of_doors": null,
     "number_of_seats": null,
@@ -144,8 +204,12 @@
     "number_of_wheels": null,
     "odometer_judgement": null,
     "pending_recall": null,
+    "primary_color": null,
+    "secondary_color": null,
     "taxi": null,
-    "vehicle_type": null
+    "vehicle_type": null,
+    "wheelbase": null,
+    "fuel": []
   }
   
   '''
