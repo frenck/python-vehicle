@@ -24,6 +24,11 @@ class VehicleType(StrEnum):
     CENTER_AXLE_TRAILER = "Middenasaanhangwagen"
     AGRICULTURAL_OR_FORESTRY_TRACTOR = "Land- of bosbouwtrekker"
     AGRICULTURAL_OR_FORESTRY_TRACTOR_TRAILER = "Land- of bosb aanhw of getr uitr stuk"
+    AUTONOMOUS_TRAILER = "Autonome aanhangwagen"
+    LIMITED_SPEED_MOTOR_VEHICLE = "Motorrijtuig met beperkte snelheid"
+    MOBILE_MACHINE = "Mobiele machine"
+    MOTORCYCLE_WITH_SIDECAR = "Motorfiets met zijspan"
+    SEMI_TRAILER = "Oplegger"
 
 
 class VehicleInterior(StrEnum):
